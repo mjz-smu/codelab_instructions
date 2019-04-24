@@ -32,18 +32,45 @@ There are also a variety of flags are specific to each benchmark. To find these 
     
 We can see that there are multiple flags that we can use to customize our iperf benchmark to match our specific needs. For example, in iperf, we can use `--iperf_runtime_in_seconds` to set the amount of time the throughput test runs for or we can use `--iperf_sending_thread_count` to set the number of threads that iperf uses.
 
-#TODO add stuff about config files
-
 ## Network Tests
 
 For this codelab, we are primarily interested in network benchmarks. PerfKitBenchmarker includes 3 main widely used network benchmarks: ping, iperf, netperf.
 
 ### ping
+Ping is the standard tool to test network latency. It simply measures the round trip time (rtt) of ICMP packets.
 
 ### iperf
+Iperf is a tool that is used to measure network throughput using TCP or UDP streams. It supports multiple threads streaming data simultaneously. It has a variety of parameters that can be set to test and optimize throughput. 
 
 ### netperf
+Netperf contains several different test types. We can use TCP_RR to test network latency or TCP_STREAM to test network throughput. Though it doesn't support multiple streaming threads, we can get around this by running multiple instances of netperf in parallel. It also supported UDP latency and throughput tests. With netperf, we can get data at a very fine granularity with its histograms.
 
+We tend to use a combination of all three benchmark tools when doing our network benchmarks to make sure they agree with each other.
+
+## Config Files
+
+If we want to run benchmarks between two specific zones with specific flags, the easiest way to do so is with benchmark configuration files. The following file runs iperf between a VM in zone us-central1-b and a VM in zone europe-west1-d.
+
+    iperf:
+      vm_groups:
+        vm_1:
+          cloud: GCP
+          vm_spec:
+            GCP: 
+              zone: us-central1-b
+        vm_2:
+          cloud: GCP
+          vm_spec:
+            GCP: 
+              zone: europe-west1-d
+
+To run this benchmark, we need to specify the config file. If we place the config file in the PerfKitBenchmarker/perfkitbenchmarker/configs/ directory, we can simply specify the name of the config file
+
+    ./pkb.py --benchmark_config_file=<config_file.yml> --benchmarks=iperf
+    
+If the config file is in another location, we need to specify the full path of the config file
+ 
+    ./pkb.py --benchmark_config_file=/path/to/config/file.yml --benchmarks=iperf
 
 
 By default PKB will output results to the terminal and save them in the directory /tmp/perfkitbenchmarker/runs/

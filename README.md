@@ -32,6 +32,8 @@ There are also a variety of flags are specific to each benchmark. To find these 
     
 We can see that there are multiple flags that we can use to customize our iperf benchmark to match our specific needs. For example, in iperf, we can use `--iperf_runtime_in_seconds` to set the amount of time the throughput test runs for or we can use `--iperf_sending_thread_count` to set the number of threads that iperf uses.
 
+Additionally, flags and descriptions for all linux benchmarks can be found [here](https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker/blob/master/testsuite_docs/linux_benchmarks.md)
+
 ## Network Tests
 
 For this codelab, we are primarily interested in network benchmarks. PerfKitBenchmarker includes 3 main widely used network benchmarks: ping, iperf, netperf.

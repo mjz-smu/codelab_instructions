@@ -1,6 +1,4 @@
-# codelab_instructions
-
-PKB Quickstart
+PerfKitBenchmarker Code Lab
 --------------
 --------------
 
@@ -12,7 +10,7 @@ Go to your cloud console (console.cloud.google.com) and click the ‘Activate Cl
 
 Clone or download the PerfkitBenchmarker Repo
 
-    git clone https://github.com/GoogleCloudPlatform/PerfKitBenchmarker.git
+    git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker.git
 
 Install PKB dependencies
 
@@ -20,14 +18,22 @@ Install PKB dependencies
     
     sudo pip install -r requirements.txt
 
-Now you can run a simple throughput test on GCP using
+Just running ./pkb.py will attempt to run a standard set of benchmarks on default machine types in the default region.
 
-    ./pkb.py --benchmarks=iperf
+To run a specific benchmark, we need to use flags. Lets say we want to run a throughput test (iperf) for n1-standard-2 machines. We would need to use the `--benchmarks` flag and the `--machine_type` flag.
 
+    ./pkb.py --benchmarks=iperf --machine_type=n1-standard-2
+    
+To run multiple benchmarks, we can give the benchmarks flag a comma separated list.
+There are also a variety of flags are specific to each benchmark. To find these flags and further information about a benchmark, we can use the helpmatchmd flag. Run the following command to find flags for the iperf benchmark
+
+    ./pkb.py --helpmatchmd=iperf
+    
+We can see that there are multiple flags that we can use to customize our iperf benchmark to match our specific needs. For example, in iperf, we can use --iperf_runtime_in_seconds to set the amount of time the throughput test runs for or we can use --iperf_sending_thread_count to set the number of threads that iperf uses.
 
 
 By default PKB will output results to the terminal and save them in the directory /tmp/perfkitbenchmarker/runs/
 
-By adding the following flags, we can also push results to BigQuery
+We can also push the results of our benchmarks to BigQuery. To do this we must add the following flags to our pkb command
 
-    --bigquery_table=<dataset.table> --bq_project=<project_id>
+    ./pkb.py --benhmarks=iperf --bigquery_table=<dataset.table> --bq_project=<project_id>

@@ -2,6 +2,7 @@ PerfKitBenchmarker Code Lab
 --------------
 --------------
 
+## Installation
 These instructions are for Google Cloud Console
 They detail a simple PKB setup to run basic tests on GCP. Additional setup may be required to run benchmarks on other providers and more complex benchmarks may also require additional setup that is specific to that benchmark
 More complete instructions for all tasks can be found here
@@ -33,15 +34,15 @@ We can see that there are multiple flags that we can use to customize our iperf 
 
 #TODO add stuff about config files
 
-##Network Tests
+## Network Tests
 
 For this codelab, we are primarily interested in network benchmarks. PerfKitBenchmarker includes 3 main widely used network benchmarks: ping, iperf, netperf.
 
-###ping
+### ping
 
-###iperf
+### iperf
 
-###netperf
+### netperf
 
 
 

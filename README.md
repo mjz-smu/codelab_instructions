@@ -1,6 +1,8 @@
 PerfKitBenchmarker Code Lab
 --------------
 --------------
+## Introduction
+add what PKB is
 
 ## Installation
 These instructions are for Google Cloud Console
@@ -74,6 +76,7 @@ If the config file is in another location, we need to specify the full path of t
  
     ./pkb.py --benchmark_config_file=/path/to/config/file.yml --benchmarks=iperf
 
+## Saving and Using Data
 
 By default PKB will output results to the terminal and save them in the directory /tmp/perfkitbenchmarker/runs/
 

@@ -6,6 +6,16 @@ PerfKit Benchmarker (PKB) is an open source benchmarking tool that provides a wi
 
 In this codelab we will go through installation and basic operation of PerfKit Benchmarker. We will discuss how to run benchmarks, use configuration files, and store and use test results.
 
+### What you'll learn
+How to install and use PerfKit Benchmarker
+How to use configuration files for PerfKit Benchmarker
+How to Store and Query data with PerKit Benchmarker
+
+### What you'll need
+A Google Cloud Platform project
+A web browser, such as Google Chrome
+Basic familiarity with Linux command line
+
 ## Installation
 These instructions are for Google Cloud Console
 They detail a simple PKB setup to run basic tests on GCP. Additional setup may be required to run benchmarks on other providers and more complex benchmarks may also require additional setup that is specific to that benchmark

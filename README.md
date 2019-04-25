@@ -77,6 +77,22 @@ If the config file is in another location, we need to specify the full path of t
 
 By default PKB will output results to the terminal and save them in the directory /tmp/perfkitbenchmarker/runs/
 
-We can also push the results of our benchmarks to BigQuery. To do this we must add the following flags to our pkb command
+We can also push the results of our benchmarks to BigQuery. To to this we must first create a dataset to drop the results into. In your cloud console, enter:
+
+    bq mk <new_dataset_name>
+
+When we run pkb, we need to specify the parameters for where we want our data to go in BigQuery. `--bq_project` is the ID of your GCP project and `bigquery_table` takes the dataset name followed by a table name. You don't need to create a table beforehand; it will be created for you by pkb if one of that name does not already exist.
+
+Now let's run a benchmark and push the data to our BigQuery table
 
     ./pkb.py --benhmarks=iperf --bigquery_table=<dataset.table> --bq_project=<project_id>
+    
+After this has finished, we can now see our data in bigQuery either by going to [BigQuery](https://console.cloud.google.com/bigquery).
+
+Perform a simple query to select all results: `SELECT * from <dataset.table>`
+
+This can also be done using `bq` in cloud console:
+
+    bq query 'select * from <dataset.table>'
+    
+ 

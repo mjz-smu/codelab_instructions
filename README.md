@@ -63,9 +63,14 @@ Netperf contains several different test types. We can use TCP_RR to test network
 
 We tend to use a combination of all three benchmark tools when doing our network benchmarks to make sure they agree with each other.
 
+### Running Network Benchmarks
+Now that we know what benchmarks are available to us, we can determine what tests would fit our needs. Let's say we want to determine the latency between two machines in zone `us-east1-b` 
+
+    ./pkb.py --benchmarks=ping --zones=us-east1-b
+
 ## Config Files
 
-If we want to run benchmarks between two specific zones with specific flags, the easiest way to do so is with benchmark configuration files. The following file runs iperf between a VM in zone us-central1-b and a VM in zone europe-west1-d.
+If we want to run benchmarks between two specific zones with specific flags, the easiest way to do so is with benchmark configuration files. The following file runs iperf between a VM in zone `us-central1-b` and a VM in zone `us-east1-b` .
 
     iperf:
       vm_groups:
@@ -78,7 +83,7 @@ If we want to run benchmarks between two specific zones with specific flags, the
           cloud: GCP
           vm_spec:
             GCP: 
-              zone: europe-west1-d
+              zone: us-east1-b
 
 To run this benchmark, we need to specify the config file. If we place the config file in the PerfKitBenchmarker/perfkitbenchmarker/configs/ directory, we can simply specify the name of the config file
 

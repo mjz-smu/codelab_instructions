@@ -87,7 +87,7 @@ Now let's run a benchmark and push the data to our BigQuery table
 
     ./pkb.py --benhmarks=iperf --bigquery_table=<dataset.table> --bq_project=<project_id>
     
-After this has finished, we can now see our data in bigQuery either by going to [BigQuery](https://console.cloud.google.com/bigquery).
+After this has finished, we can now see our data in BigQuery either by going to [BigQuery](https://console.cloud.google.com/bigquery).
 
 Perform a simple query to select all results: `SELECT * from <dataset.table>`
 

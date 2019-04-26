@@ -23,6 +23,10 @@ More complete instructions for all tasks can be found here
 
 Go to your cloud console (console.cloud.google.com) and click the ‘Activate Cloud Shell’ button on the top right of the screen.
 
+Inline-style: 
+![Cloud Shell Icon](https://github.com/SMU-ATT-Center-for-Virtualization/codelab_instructions/images/cloudshell_icon.png "Cloud Shell Icon")
+
+
 Clone or download the PerfkitBenchmarker Repo
 
     git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker.git

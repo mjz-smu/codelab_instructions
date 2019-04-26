@@ -17,27 +17,27 @@ In this codelab we will go through installation and basic operation of PerfKit B
 * Basic familiarity with Linux command line
 
 ## Installation
-These instructions are for Google Cloud Console
+These instructions are designed to run in Google Cloud Shell. If not running in Cloud Shell, some additional setup may be needed.
 They detail a simple PKB setup to run basic tests on GCP. Additional setup may be required to run benchmarks on other providers and more complex benchmarks may also require additional setup that is specific to that benchmark
 More complete instructions for all tasks can be found here
 
 Go to your cloud console (console.cloud.google.com) and click the ‘Activate Cloud Shell’ button on the top right of the screen.
 
-Inline-style: 
 ![alt text](images/cloud_shell_icon.png "Cloud Shell Icon")
 
+Cloud Shell provides a small virtual machine that is preloaded with Google Cloud development tools. It also has your PROJECT_ID set to your current project.
 
-Clone or download the PerfkitBenchmarker Repo
+In cloud shell, clone the PerfkitBenchmarker Repository into your directory
 
     git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker.git
 
-Install PKB dependencies
+Move into the PerfKitBenchmarker directory and install PKB's dependencies
 
-    cd /path/to/PerfKitBenchmarker
+    cd PerfKitBenchmarker
     
     sudo pip install -r requirements.txt
 
-Just running `./pkb.py` will attempt to run a standard set of benchmarks on default machine types in the default region.
+Now we are able to start running benchmarks. Just executing `./pkb.py` will attempt to run a standard set of benchmarks on default machine types in the default region.
 
 To run a specific benchmark, we need to use flags. Lets say we want to run a throughput test (iperf) for n1-standard-2 machines. We would need to use the `--benchmarks` flag and the `--machine_type` flag.
 
@@ -54,7 +54,7 @@ Additionally, flags and descriptions for all linux benchmarks can be found [here
 
 ## Network Tests
 
-For this codelab, we are primarily interested in network benchmarks. PerfKitBenchmarker includes 3 main widely used network benchmarks: ping, iperf, netperf.
+For this codelab, we are primarily interested in network benchmarks. PerfKitBenchmarker includes 3 main widely used network benchmarks: ping, iperf, netperf. These network tests are each most useful in different situations.
 
 ### ping
 Ping is the standard tool to test network latency. It simply measures the round trip time (rtt) of ICMP packets.
@@ -63,7 +63,7 @@ Ping is the standard tool to test network latency. It simply measures the round 
 Iperf is a tool that is used to measure network throughput using TCP or UDP streams. It supports multiple threads streaming data simultaneously. It has a variety of parameters that can be set to test and optimize throughput. 
 
 ### netperf
-Netperf contains several different test types. We can use TCP_RR to test network latency or TCP_STREAM to test network throughput. Though it doesn't support multiple streaming threads, we can get around this by running multiple instances of netperf in parallel. It also supported UDP latency and throughput tests. With netperf, we can get data at a very fine granularity with its histograms.
+Netperf contains several different test types. We can use TCP_RR to test network latency or TCP_STREAM to test network throughput. Though it doesn't support multiple streaming threads, we can get around this by running multiple instances of netperf in parallel. It also supported UDP latency and throughput tests. With netperf, we can get data at a very fine granularity with its data histograms.
 
 We tend to use a combination of all three benchmark tools when doing our network benchmarks to make sure they agree with each other.
 
@@ -74,7 +74,9 @@ Now that we know what benchmarks are available to us, we can determine what test
 
 ## Config Files
 
-If we want to run benchmarks between two specific zones with specific flags, the easiest way to do so is with benchmark configuration files. The following file runs iperf between a VM in zone `us-central1-b` and a VM in zone `us-east1-b` .
+If we want to run benchmarks between two specific zones with specific flags, the easiest way to do so is with benchmark configuration files. The following file runs iperf between a VM in zone `us-central1-b` and a VM in zone `us-east1-b` with 5 sending threads for 30 seconds. As you can see, we can set the cloud, zone, machine type, as well as many other options for each Virtual machine.
+
+sample_config.yml
 
     iperf:
       vm_groups:
@@ -82,16 +84,22 @@ If we want to run benchmarks between two specific zones with specific flags, the
           cloud: GCP
           vm_spec:
             GCP: 
+              machine_type: n1-standard-2
               zone: us-central1-b
         vm_2:
           cloud: GCP
           vm_spec:
             GCP: 
+              machine_type: n1-standard-2
               zone: us-east1-b
+    flags:
+      iperf_sending_thread_count: 5
+      iperf_runtime_in_seconds: 30
 
-To run this benchmark, we need to specify the config file. If we place the config file in the PerfKitBenchmarker/perfkitbenchmarker/configs/ directory, we can simply specify the name of the config file
 
-    ./pkb.py --benchmark_config_file=<config_file.yml> --benchmarks=iperf
+To run this benchmark, we need to specify the config file. If the config file in the PerfKitBenchmarker/perfkitbenchmarker/configs/ directory, we can simply specify the name of the config file. In our case, this config file is already present in that directory, so we can run pkb using that config using the following command:
+
+    ./pkb.py --benchmark_config_file=sample_config.yml --benchmarks=iperf
     
 If the config file is in another location, we need to specify the full path of the config file
  

@@ -109,22 +109,82 @@ If the config file is in another location, we need to specify the full path of t
 
 By default PKB will output results to the terminal and save them in the directory /tmp/perfkitbenchmarker/runs/
 
-We can also push the results of our benchmarks to BigQuery. To to this we must first create a dataset to drop the results into. In your cloud console, enter:
+We can also push the results of our benchmarks to BigQuery. To to this we must first create a dataset named `example_dataset` to drop the results into. In your cloud console, enter:
 
-    bq mk <new_dataset_name>
+    bq mk example_dataset
 
 When we run pkb, we need to specify the parameters for where we want our data to go in BigQuery. `--bq_project` is the ID of your GCP project and `bigquery_table` takes the dataset name followed by a table name. You don't need to create a table beforehand; it will be created for you by pkb if one of that name does not already exist.
 
-Now let's run a benchmark and push the data to our BigQuery table
+Now let's run a benchmark and push the data to our BigQuery table named `network_tests`
 
-    ./pkb.py --benhmarks=iperf --bigquery_table=<dataset.table> --bq_project=<project_id>
+    ./pkb.py --benhmarks=iperf --bigquery_table=example_dataset.network_tests> --bq_project=<project_id>
     
 After this has finished, we can now see our data in BigQuery either by going to [BigQuery](https://console.cloud.google.com/bigquery).
 
 Perform a simple query to select all results: `SELECT * from <dataset.table>`
 
-This can also be done using `bq` in cloud console:
+This can also be done using `bq` in cloud shell:
 
     bq query 'select * from <dataset.table>'
     
- 
+## PerfKit Explorer (Data Visualization)
+
+So far we have learned how to run tests and store that data. To make that data more useful to use, we should visualize it in some manner. PerfKit Benchmarker has a sister application called PerfKit Explorer that we can use for this. First we just need to set it up. 
+
+1. In your cloud shell, first let's install the prerequisite packages:
+  
+       sudo apt-get update
+
+       sudo apt-get install python2.7 openjdk-8-jdk git nodejs nodejs-legacy npm
+
+1. Make sure that the Google App Engine SDK for Python is installed.
+
+       gcloud components install app-engine-python
+
+       gcloud components install app-engine-python-extras
+       
+1. Clone the repository
+
+       cd ~
+       git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitExplorer.git
+
+1. Move into the repository and download the required submodules
+       
+       cd PerfKitExplorer
+       git submodule update --init
+       
+1. Install required packages
+      
+       npm install
+       sudo npm install -g bower
+       bower install
+
+### Compile and Deploy
+
+Next we need to compile and deploy this as an App Engine Application. Make sure you are doing this on a Google CLoud Project where you do not already have an App Engine app running, or this will run instead
+
+1. Modify the config/data_source_config.json so that the production tags are appropriate for the repository you created previously. If not using an analytics key, leave that field blank. For example:
+
+       project_id: <project-id>
+       project_name: <project-name>
+       samples-mart: <project_id>.example_dataset
+       analytics-key: 
+       
+1. Compile the program
+
+       bash compile.sh
+       
+1. Move into the newly created `deploy` folder and deploy the application to App Engine
+
+       cd deploy
+       gcloud app deploy
+       
+The app will deploy to http://PROJECT_ID.appspot.com
+
+### Setup the dashboard
+
+1. Open the project URL http://PROJECT_ID.appspot.com in your browser.
+
+1. Click "Edit Config" in the gear icon at the top right and set "default project" to the project id.
+
+1. In Perfkit Dashboard Administration, click "Upload", and select the sample dashboard file: PerfKitExplorer/data/samples_mart/sample_dashboard.json

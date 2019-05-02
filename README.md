@@ -92,7 +92,7 @@ gcloud config set project <PROJECT_ID>
 Updated property [core/project].
 ```
 
-## Install PKB using git
+## Installing PKB using git
 
 **Note**: in this lab, you use the
 [SMU AT&T Center for Virtualization](https://www.smu.edu/Provost/virtualization)
@@ -138,7 +138,7 @@ standard set of benchmarks on default machine types in the default region.
 
 To run a specific benchmark, you need to use **flags**.
 
-### Setting cloud provider and zones
+### Set cloud provider and zones
 
 You should understand how `--cloud` provider and `--zones` flags work.
 GCP is the default provider for PKB, and the `--cloud` flag has a default of
@@ -148,7 +148,7 @@ zones in the [Useful Global
 Flags](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker#useful-global-flags)
 section of the PKB readme.
 
-### Discovering helfpul details about benchmark tests
+### Discover helfpul details about benchmark tests
 
 Base PKB includes the `--helpmatch` flag which can be used to discover details
 about benchmarks and related configuration flags. You can pass
@@ -242,36 +242,42 @@ time (rtt) of ICMP packets.
 
 ### iperf
 
-The **iperf** tool is easy to use and is used to measure network throughput using
-TCP or UDP streams. It supports multiple threads streaming data simultaneously.
-It has a variety of parameters that can be set to test and maximize throughput.
+The **iperf** tool is easy to use and is used to measure network throughput
+using TCP or UDP streams. It supports multiple threads streaming data
+simultaneously. It has a variety of parameters that can be set to test and
+maximize throughput.
 
 **Note**: iperf3 is preferred and used in PKB.
 
 ### netperf
 
 The **netperf** tool contains several different test types. You can use
-**TCP_RR** to test network latency (using TCP requests and responses), or
+**TCP_RR** (TCP request response) to test network latency, or
 **TCP_STREAM** to test network throughput. You can run multiple instances of
-netperf in parallel to heavily utilize multiple processors. It also
-supports running UDP latency and throughput tests. With netperf, you can also
-get some advanced reporting with its data histograms.
+netperf in parallel to heavily stress links via multiple processors. The
+netperf tool also supports running UDP latency and throughput tests.
+With netperf, you can also see alternative reporting flavors with its data
+histograms.
 
 In many cases, it is recommended to run combinations of all three networking
 benchmark tools. The results can then be used to confirm results.
 
 ## Running Network Benchmarks
 
-### Measuring latency
+### Measure latency with ping
 
 Run a test to determine the latency between two machines in a single
 zone: `us-east1-b`.
+
+**Expected duration**: xxmin.
 
 ```
 ./pkb.py --benchmarks=ping --zones=us-east1-b
 ```
 
-### Using Config Files for More Complex Tests
+**Expected output**: xxx.
+
+### Create Config Files for More Complex Tests
 
 To run networking benchmarks between two specific zones with specific flags, the
 easiest way is with **benchmark configuration files**. For example, the
@@ -303,11 +309,15 @@ flags:
   iperf_runtime_in_seconds: 30
 ```
 
-To run this benchmark, supply the config file.
+Run this benchmark using the config file.
+
+**Expected duration**: xxmin.
 
 ```
 ./pkb.py --benchmark_config_file=sample_config.yml --benchmarks=iperf
 ```
+
+**Expected output**: xxx.
 
 By default, config files must reside under the
 `PerfKitBenchmarker/perfkitbenchmarker/configs/` directory. Our fork has a
@@ -319,51 +329,66 @@ You can also specify the full path of the config file:
 ./pkb.py --benchmark_config_file=/path/to/config/file.yml --benchmarks=iperf
 ```
 
-## Saving and Using Data
+## Saving and Using Data with BigQuery
 
-By default PKB will output results to the terminal and save them in the
+By default PKB will output results to the terminal and save logs to the
 directory `/tmp/perfkitbenchmarker/runs/`.
 
-You can also push the results of your benchmark runs to
-[BigQuery](https://cloud.google.com/bigquery/), a serverless, highly-scalable,
-cost-effective data warehouse.
+If you plan to run many tests, a recommended practice is to push your result
+data to [BigQuery](https://cloud.google.com/bigquery/), a serverless,
+highly-scalable, cost-effective data warehouse. You can then use BigQuery to
+review your test results over time, and create data visualizations.
 
-To to this you must first create a dataset named `example_dataset` to drop
-the results into. In your cloud console, enter:
+### Create a dataset
+
+To do this, create a **dataset** where result tables and views can be created,
+secured and shared. You can create datasets either using the GCP Console or
+using the BigQuery command-line tool `bq` in Cloud Shell.
 
 ```
 bq mk example_dataset
 ```
 
-When you run PKB, we need to specify the parameters for where we want our data
-to go in BigQuery. `--bq_project` is the ID of your GCP project and
-`bigquery_table` takes the dataset name followed by a table name. You don't
-need to create a table beforehand; it will be created for you by pkb if one of
-that name does not already exist.
+### Run PKB with BigQuery arguments
 
-Now let's run a benchmark and push the data to our BigQuery table named
-`network_tests`
+Then, when you run PKB, you supply BigQuery-specific arguments to send your
+result data directly to BigQuery tables.
 
-```
-    ./pkb.py --benhmarks=iperf --bigquery_table=example_dataset.network_tests> --bq_project=<project_id>
-```
+*   `--bq_project`: your GCP Project-ID that owns the dataset and tables.
+*   `bigquery_table`: a fully qualified table name, including the dataset.
 
-After this has finished, we can now see our data in BigQuery either by going
-to [BigQuery](https://console.cloud.google.com/bigquery).
+The first time you run experiments, PKB will create the table if it does not
+yet exist.
 
-Perform a simple query to select all results:
+Run an iperf benchmark test and push the test log data to a BigQuery table
+named `network_tests`.
+
+**Expected duration**: xxmin.
 
 ```
-SELECT * from <dataset.table>
+    ./pkb.py --benhmarks=iperf \
+        --bq_project=<project_id> \
+        --bigquery_table=example_dataset.network_tests>
 ```
 
-This can also be done using `bq` in cloud shell:
+**Expected output**: xxx.
+
+You can then see your data using the
+[BigQuery UI](https://console.cloud.google.com/bigquery).
+
+Use the **Query View** to run a simple query that shows your results.
 
 ```
-bq query 'select * from <dataset.table>'
+SELECT * FROM <dataset.table> LIMIT 200;
 ```
 
-## PerfKit Explorer (Data Visualization)
+You can also use the command-line `bq` tool, again, in Cloud Shell.
+
+```
+bq query 'SELECT * FROM <dataset.table> LIMIT 200'
+```
+
+## Visualizing Data with PerfKit Explorer
 
 So far we have learned how to run tests and store that data. To make that
 data more useful to use, we should visualize it in some manner.
@@ -439,7 +464,7 @@ gcloud app deploy
 
 The app will deploy to http://PROJECT_ID.appspot.com
 
-### Setup the dashboard
+### Set up the dashboard
 
 1. Open the project URL http://PROJECT_ID.appspot.com in your browser.
 

@@ -186,7 +186,7 @@ section of the PKB readme.
 
 ### Run one benchmark test with the benchmark flag
 
-The `--benchmark` flag is used to select the benchmark(s) run. Not supplying
+The `--benchmark` flag is used to select the benchmark(s) run. Not sup*plying
 `--benchmark` is the same as using `--benchmarks="standard_set"`.
 The **standard_set** is a collection of commonly used benchmarks. You can read
 more about benchmark sets later in this lab.
@@ -195,8 +195,8 @@ Cloud benchmark tests commonly need at least 10minutes to complete because of
 the many resources, including networks, firewall rules, and VMs, that must
 be both provisioned and de-provisioned.
 
-Start a benchmark test now, and then continue working through the lab while
-the test executes.
+**Start a benchmark test now, and then continue working through the lab while
+the test executes.**
 
 Run the commonly used network throughput test, **iperf**, with a small
 machine, **n1-standard-1**.
@@ -246,7 +246,7 @@ cd PerfKitBenchmarker
 
 #### Step 3
 
-Base PKB includes the `--helpmatch` flag which can be used to discover details
+PKB includes the `--helpmatch` flag which can be used to discover details
 about benchmarks and related configuration flags. You can pass
 `--helpmatch` a regex and it will print related help text.
 
@@ -258,7 +258,7 @@ Review all the global flags for PKB.
 
 #### Step 4
 
-As used earlier, the `--benchmarks` selects a specific benchmark or
+As used already, the `--benchmarks` selects a specific benchmark or
 benchmark set.
 
 Review the full list of benchmarks available.
@@ -267,14 +267,14 @@ Review the full list of benchmarks available.
 ./pkb.py --helpmatch=benchmarks | grep perfkitbenchmarker
 ```
 
-You should see around 70 different benchmarks available to run, within
+You should see around 70 different benchmarks available to run, within the
 linux_benchmarks collection.
 
 PKB has a naming convention for benchmarks of
 **[NAME]_benchmark**. For example, notice: **ping_benchmark**,
-**iperf_benchmark**, and **netperf_benchmark**.0
+**iperf_benchmark**, and **netperf_benchmark**.
 
-#### Step 3
+#### Step 5
 
 When you want to review the details and flags of a benchmark in depth, it can be
 easier to read formatted MarkDown.
@@ -292,7 +292,7 @@ Review the available Linux benchmarks from the
 Try searching on **ping_benchmark**, **iperf_benchmark**, and
 **netperf_benchmark**.
 
-#### Step 4
+#### Step 6
 
 Each benchmark can have custom flags too. Review the flags for the
 **netperf** and **iperf** benchmarks.
@@ -341,43 +341,50 @@ With netperf, you can also see alternative reporting flavors with its data
 histograms.
 
 In many cases, it is recommended to run combinations of all three networking
-benchmark tools and use added tests for result confirmation.
+benchmark tools and use the additional test result data to confirm your
+findings.
 
 ## Explore the results of a benchmark
 
-Return to the first Cloud Shell to review the test results from **iperf**.
+The **iperf** test you started, should now be completed. Retu*rn to the first
+Cloud Shell to review the test results from **iperf**.
 
-Detailed output from the benchmark is printed to the screen, and saved to
+Detailed output from the benchmark is printed to the terminal, and saved to
 log files under `/tmp/perfkitbenchmarker/runs/`.
 
-Whether you scroll back in the Cloud Shell, or look through the pkb.log file,
-you can review many details of the benchmark pass:
+Whether you scroll back in the Cloud Shell, or look through the `pkb.log` file,
+you can review many details about the benchmark pass:
 
-*   PKB details: version# and flags used.
-*   Resources being provisioned: an auto-mode VPC network, two firewall rules,
+*   **PKB details**:* version# and flags used.
+*   **Resources being provisioned**: an auto-mode VPC network, two firewall rules,
     one for internal IPs and another for external IPs, two VM instances, and
     attached persistent-disks.
-*   Software setup: Setup directories on both VMs and install python, iperf,
-    and other packages.
-*   System configuration: adjust kernel settings,
-    including **tcp_congestion_control**.
-*   Test execution:
+*   **Software setup**: Setup directories on both VMs, installations of python,
+    iperf, and other packages.
+*   **System configuration**: adjustments to kernel settings,
+    including `tcp_congestion_control`.
+*   **Test execution**: this **iperf** benchmark runs 4 different tests...
     *   VM1->VM2 throughput test over external IPs
     *   VM1->VM2 throughput test over internal IPs
     *   VM2->VM1 throughput test over external IPs
     *   VM2->VM1 throughput test over internal IPs
-*   Resources being cleaned up.
-*   Detailed result data: includes details about the resources along with
-    metrics that include timestamp, units, and values.
-*   Results Summary: an easy-to-read table with the key metrics and values.
-*   Overall test status, especially useful when multiple benchmarks have run.
+*   **Resources being cleaned up**: deprovision the resources created earlier.
+*   **Detailed result data**:
+    *   Detailed metadata describing the resources allocated.
+    *   Metrics: including timestamp, units, and values for measurements.
+*   **Results Summary**: an easy-to-read table with the key metrics and values.
+*   **Overall test status**: especially useful when multiple benchmarks have run.
 
-## Running Network Benchmarks
+## Running more Network Benchmarks
+
+When you have time, later, run a few more networking benchmarks. Explore the
+log output, and results summaries carefully. Consider adjusting flags for the
+benchmarks by looking through the `--helpmatchmd` output.
 
 ### Measure latency with ping
 
 Run a test to determine the latency between two machines in a single
-zone: `us-east1-b`.
+zone. Supply the machine_type and/or zone.
 
 **Expected duration**: ~11-12min.
 
@@ -411,14 +418,48 @@ Success rate: 100.00% (1/1)
 ...
 ```
 
-### Create Config Files for More Complex Tests
+### Measure latency and throughput with netperf
 
-To run networking benchmarks between two specific zones with specific flags, the
-easiest way is with **benchmark configuration files**. For example, the
-following file runs **iperf** between a VM in zone `us-central1-b` and a VM
-in zone `us-east1-b`, with 5 sending threads for 30 seconds.
+Run a test to determine the throughput and latency between two machines in a
+single zone.
 
-You can set the cloud, zone, machine type, as well as many other options for
+**Note**: as of 2019, **netperf** is the name of the benchmark, but
+**netperf v2.7.0** is used with some PKB-specific patches.
+
+**Expected duration**: ~20min.
+
+The **netperf** benchmark takes a little longer than **iperf* *because the
+binaries are compiled on the VMs, and the VMs are rebooted to apply
+kernel/system configuration changes.
+
+```
+./pkb.py --benchmarks=netperf
+```
+
+**Expected output**:
+
+```
+-------------------------PerfKitBenchmarker Results Summary-------------------------
+NETPERF:
+...
+----------------------------------------
+Name  UID    Status     Failed Substatus
+----------------------------------------
+netperf  netperf0  SUCCEEDED
+----------------------------------------
+Success rate: 100.00% (1/1)
+...
+```
+
+## Create Config Files for More Complex Tests
+
+The easiest way To run networking benchmarks between two specific zones with
+specific flags is to use **benchmark configuration files**. For example, the
+following configuration file runs **iperf** between a VM in zone
+`us-central1-b` and a VM in zone `us-east1-b`, with 5 sending threads, with
+2 vCPU machines, for 30 seconds each.
+
+You can set the cloud provider, zone, machine type, and many other options for
 each VM in the config file.
 
 **sample_config.yml**
@@ -443,15 +484,28 @@ flags:
   iperf_runtime_in_seconds: 30
 ```
 
-Run this benchmark using the config file.
+When you haave time later, run this benchmark using the config file.
 
-**Expected duration**: xxmin.
+**Expected duration**: 13-14min.
 
 ```
 ./pkb.py --benchmark_config_file=sample_config.yml --benchmarks=iperf
 ```
 
-**Expected output**: xxx.
+**Expected output**:
+
+```
+-------------------------PerfKitBenchmarker Results Summary-------------------------
+IPERF:
+...
+----------------------------------------
+Name  UID    Status     Failed Substatus
+----------------------------------------
+iperf  iperf0  SUCCEEDED
+----------------------------------------
+Success rate: 100.00% (1/1)
+...
+```
 
 By default, config files must reside under the
 `PerfKitBenchmarker/perfkitbenchmarker/configs/` directory. Our fork has a
@@ -465,13 +519,23 @@ You can also specify the full path of the config file:
 
 ## Benchmark Sets
 
-Other sets
-are curated and available to run as well. You can run multiple benchmarks
-by using a comma separated list.
+PKB defines curated collections of benchmark tests called **benchmark sets**.
+These sets are defined in the `perfkitbenchmarker/benchmark_sets.py` file.
 
+Sets include:
+*   **standard_set**:* commonly agreed upon set of cloud performance bencharks.
+*   **google_set**: slightly longer collection of benchmarks than the
+standard_set. Includes `tensorflow` benchmarks.
+*   **kubernetes_set**: collection of tests intended to run on Kubernetes
+clusters. Requires specialized setup at this time.
+*   **cloudsuite_set**: collection of cloudsuite_XXX benchmarks.
 
+Other sets are defined as well.
 
-## Saving and Using Data with BigQuery
+You can also run multiple benchmarks by using a comma separated list with
+the `--benchmarks` flag.
+
+## Saving and Reviewing Data with BigQuery
 
 By default PKB will output results to the terminal and save logs to the
 directory `/tmp/perfkitbenchmarker/runs/`.
@@ -480,12 +544,14 @@ If you plan to run many tests, a recommended practice is to push your result
 data to [BigQuery](https://cloud.google.com/bigquery/), a serverless,
 highly-scalable, cost-effective data warehouse. You can then use BigQuery to
 review your test results over time, and create data visualizations.
-
+*
 ### Create a dataset
 
-To do this, create a **dataset** where result tables and views can be created,
-secured and shared. You can create datasets either using the GCP Console or
-using the BigQuery command-line tool `bq` in Cloud Shell.
+To do this, create a **dataset** where result tables and views can be
+instantiated, secured and shared. You can create datasets using the BigQuery
+UI in the GCP Console.
+
+You can also BigQuery command-line tool `bq` in Cloud Shell.
 
 ```
 bq mk example_dataset
@@ -496,24 +562,35 @@ bq mk example_dataset
 Then, when you run PKB, you supply BigQuery-specific arguments to send your
 result data directly to BigQuery tables.
 
-*   `--bq_project`: your GCP Project-ID that owns the dataset and tables.
-*   `bigquery_table`: a fully qualified table name, including the dataset.
+*   `--bq_project`: your GCP **Project-ID** that owns the dataset and tables.
+*   `bigquery_table`: a fully qualified table name, including the dataset. The
+    first time you run experiments, PKB will create the table if it does not
+    yet exist.
 
-The first time you run experiments, PKB will create the table if it does not
-yet exist.
+When you have time later, run an **iperf** benchmark test and push the test
+log data to a BigQuery table named `network_tests`.
 
-Run an iperf benchmark test and push the test log data to a BigQuery table
-named `network_tests`.
-
-**Expected duration**: xxmin.
+**Expected duration**: 13-14min.
 
 ```
     ./pkb.py --benhmarks=iperf \
-        --bq_project=<project_id> \
-        --bigquery_table=example_dataset.network_tests>
+        --bq_project=[PROJECT-ID] \
+        --bigquery_table=example_dataset.network_tests
 ```
 
-**Expected output**: xxx.
+**Expected output**:
+```
+-------------------------PerfKitBenchmarker Results Summary-------------------------
+IPERF:
+...
+----------------------------------------
+Name  UID    Status     Failed Substatus
+----------------------------------------
+iperf  iperf0  SUCCEEDED
+----------------------------------------
+Success rate: 100.00% (1/1)
+...
+```
 
 You can then see your data using the
 [BigQuery UI](https://console.cloud.google.com/bigquery).
@@ -521,51 +598,34 @@ You can then see your data using the
 Use the **Query View** to run a simple query that shows your results.
 
 ```
-SELECT * FROM <dataset.table> LIMIT 200;
+SELECT * FROM example_dataset.network_tests LIMIT 200;
 ```
 
 You can also use the command-line `bq` tool, again, in Cloud Shell.
 
 ```
-bq query 'SELECT * FROM <dataset.table> LIMIT 200'
+bq query 'SELECT * FROM example_dataset.network_tests LIMIT 200'
 ```
 
 ## Visualizing Data with PerfKit Explorer
 
-So far we have learned how to run tests and store that data. To make that
-data more useful to use, we should visualize it in some manner.
-PerfKit Benchmarker has a sister application called PerfKit Explorer that we
-can use for this. First we just need to set it up.
+To really impact your business, though, you want to identify insights on your
+performance projects. You need to look through many passes of multiple tests
+over time. You may want to notice unexpected spikes, variations
+over time, or differences from one geography to another.
 
-1. In your cloud shell, first let's install the prerequisite packages:
+Visualization tools help you to summarize large sets of result data into
+understandable charts, and tables.
 
-```
-sudo apt-get update
-sudo apt-get install python2.7 openjdk-8-jdk git nodejs nodejs-legacy npm
-```
+**PerfKit Explorer (PKE)** is an open-source companion tool for PerfKit
+Benchmarker. With PKE, you can preload queries and views of your data
+to help you identify critical insights in your performance data.
 
-1. Make sure that the Google App Engine SDK for Python is installed.
+PKE operates as an App Engine application in your project.
 
-```
-gcloud components install app-engine-python
-gcloud components install app-engine-python-extras
-```
+### Install required packages* for PKE
 
-1. Clone the repository
-
-```
-cd ~
-git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitExplorer.git
-```
-
-1. Move into the repository and download the required submodules
-
-```
-cd PerfKitExplorer
-git submodule update --init
-```
-
-1. Install required packages
+Install the PKE packages using the npm package manager.
 
 ```
 npm install
@@ -573,53 +633,83 @@ sudo npm install -g bower
 bower install
 ```
 
-### Compile and Deploy
+### Compile and deploy the dashboard as an App Engine application
 
+**TODO(truty): create a non-default AppEngine application**
+
+``` Get rid of this
 Next we need to compile and deploy this as an App Engine Application. Make
 sure you are doing this on a Google CLoud Project where you do not already
 have an App Engine app running, or this will run instead
+```
 
-1. Modify the config/data_source_config.json so that the production tags
-are appropriate for the repository you created previously. If not using an
-analytics key, leave that field blank. For example:
+#### Step 1
+
+Update the `config/data_source_config.json` file in PKE with your
+**project-specific** details. You are **not** required to set an
+`analytics-key`.
+
+**Example data_source_config.json**
 
 ```
-project_id: <project-id>
-project_name: <project-name>
-samples-mart: <project_id>.example_dataset
+project_id: [PROJECT-ID]
+project_name: [PROJECT-NAME>
+samples-mart: [PROJECT-ID].example_dataset
 analytics-key:
 ```
 
-1. Compile the program
+#### Step 2
+
+Compile the application.
 
 ```
 bash compile.sh
 ```
 
-1. Move into the newly created `deploy` folder and deploy the application to
-App Engine
+#### Step 3
+
+Deploy the application to App Engine from the newly created `deploy` directory.
 
 ```
 cd deploy
 gcloud app deploy
 ```
 
-The app will deploy to http://PROJECT_ID.appspot.com
+The app will deploy to http://PROJECT-ID.appspot.com
 
-### Set up the dashboard
+### Load a dashboard configuration
 
-1. Open the project URL http://PROJECT_ID.appspot.com in your browser.
+#### Step 1
 
-1. Click "Edit Config" in the gear icon at the top right and set
-"default project" to the project id.
+Open the project URL http://PROJECT_ID.appspot.com in your browser.
 
-1. In Perfkit Dashboard Administration, click "Upload", and select the
-sample dashboard file: PerfKitExplorer/data/samples_mart/sample_dashboard.json
+#### Step 2
+
+Click **Edit Config** in the gear icon at the top right, and set the
+**default project** to your [PROJECT-ID].
+
+#### Step 3
+
+In **Perfkit Dashboard Administration**, click **Upload**, and select the
+sample dashboard file:
+`PerfKitExplorer/data/samples_mart/sample_dashboard.json`.
+
+#### Step 3
+
+Now you can browse through a working dashboard to get an idea how you might
+configure your dashboard using PKE.
 
 ## Congratulations!
 
-You learned xxx
+You installed PerfKit Benchmarker, and ran benchmark tests in the cloud.
+You learned how to build an end-to-end workflow for running benchmarks,
+gathering data, and visualizing performance trends.
 
 ### Next Steps / Learn More
 
+*   Run more benchmark tests!
+*   Develop more dashboards.
 *   Watch the Perfkit Benchmarker video from Google Cloud Next '19.
+*   Follow the
+    [PKB repo](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker). Look
+    for upcoming improvements in running container benchmarks.

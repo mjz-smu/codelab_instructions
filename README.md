@@ -2,21 +2,37 @@
 
 ## Overview
 
+### Performance benchmarking
+
+### Performance benchmarking on public cloud
+
+### Introducing PerfKit Benchmarker
+
 PerfKit Benchmarker (PKB) is an open source framework that provides a wide
 selection of benchmarking tools that you can use to measure and compare
 cloud providers. PKB automates setup and teardown of resources, including
 Virtual Machines (VMs), on whichever cloud provider you choose, along with
 installing and running the actual benchmark tests.
 
-### What you'll do
+### Performance benchmarking on Google Cloud Platform with PKB
 
-*   How to install and use PerfKit Benchmarker to run benchmarks
-*   How to inspect and use configuration files for different tests
-*   How to store test result data and then query it
+Performance benchmarking, with PKB, on Google Cloud Platform (GCP).
 
-### Prerequisites
+### PKB Architecture
 
-* Basic familiarity with Linux command line
+[**TODO(truty): insert diagram about stages of performance benchmarking.**]
+
+## What you'll do
+
+*   Install PerfKit Benchmarker
+*   Run benchmark tests using PerfKit Benchmarker
+*   Inspect and using custom configuration files for tests
+*   Persist test result data
+*   Query and visualize result data
+
+## Prerequisites
+
+*   Basic familiarity with Linux command line
 
 ## Setup
 
@@ -24,14 +40,15 @@ installing and running the actual benchmark tests.
 
 To complete this lab, you'll need:
 
-*   Access to a standard internet browser (Chrome browser recommended).
-*   A Google Cloud Platform (GCP) project.
+*   Access to a standard internet browser (Chrome browser recommended),
+    where you can access the GCP Console and the GCP Cloud Shell
+*   A GCP project
 
-### Sign in to Google Cloud Console
+### Sign in to GCP Console
 
 In your browser, open the [GCP Console](https://console.cloud.google.com).
 
-### Activate Google Cloud Shell
+### Activate the Cloud Shell
 
 From the GCP Console click the Cloud Shell icon on the top right toolbar:
 
@@ -47,10 +64,10 @@ greatly enhancing network performance and authentication. Much, if not all,
 of your work in this lab can be done with simply a browser or your
 Google Chromebook.
 
-Once connected to the cloud shell, you should see that you are already
+Once connected to the Cloud Shell, you should see that you are already
 authenticated and that the project is already set to your PROJECT_ID.
 
-Run the following command in the cloud shell to confirm that you are
+Run the following command in the Cloud Shell to confirm that you are
 authenticated:
 
 ```
@@ -68,6 +85,8 @@ Credentialed accounts:
 Google Cloud Platform. Full documentation is available
 from https://cloud.google.com/sdk/gcloud. It comes pre-installed on
 Cloud Shell. You will notice its support for tab-completion.
+
+In Cloud Shell, Verify your project is set up as expected.
 
 ```
 gcloud config list project
@@ -128,33 +147,108 @@ sudo pip install -r requirements.txt
 **Note**: As part of this exercise, you will will run a few basic tests on GCP
 within a simple PKB environment. Additional setup may be required to run
 benchmarks on other providers, or to run more complex benchmarks. Comprehensive
-instructions for running other benchmarks can be located within the
-[PKB repo](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker).
+instructions for running other benchmarks can be located by reviewing the
+[README in the PKB repo](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker).
 
-## Running PKB and using command-line flags
+## Running PKB using command-line flags
 
-You can run benchmarks right now. Executing `./pkb.py` would attempt to run a
-standard set of benchmarks on default machine types in the default region.
+You can run benchmarks right now. If you execute `./pkb.py`, with no
+command-line flags, PKB will attempt to run a standard set of benchmarks
+on default machine types in the default region. You can read more about the
+**standard_set** later in this lab.
 
-To run a specific benchmark, you need to use **flags**.
+Instead, it is more common to choose specific benchmarks and options, such
+as project, cloud provider, zone, and machine_type, using
+**command-line flags**.
 
-### Set cloud provider and zones
+### The project, cloud provider, zones, and machine_type flags
 
-You should understand how `--cloud` provider and `--zones` flags work.
-GCP is the default provider for PKB, and the `--cloud` flag has a default of
-**GCP**. Each cloud has a default zone, and, for GCP, the `--zone` flag defaults
-to **us-central1-a**. You can learn more about alternative cloud providers and
-zones in the [Useful Global
-Flags](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker#useful-global-flags)
+You should understand how the `--cloud` provider, `--project`,  `--zones`,
+and `--machine_type` flags work.
+
+*   `--cloud`: As **GCP** is the default cloud provider for PKB, the
+    `--cloud` flag has a default value of **GCP**.
+*   `--project`: PKB needs to have a GCP **project-id** to run. In Cloud
+    Shell, PKB inherits the `--project` **project-id** from the environment.
+*   `--zone`: Every cloud provider has a default zone. For GCP, the `--zone`
+    flag defaults to
+    [**us-central1-a**](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker/blob/master/perfkitbenchmarker/configs/default_config_constants.yaml).
+*   `--machine_type`: Benchmarks are frequently tightly coupled to
+    specific machine capabilities, especially CPU and memory. You can pick
+    your specific machines with the `--machine_type` flag. Most benchmark
+    tests, including the common networking benchmarks **ping**, **iperf**,
+    and **netperf**, default to the provider-specific
+    `default_single_core` machine. On GCP, the default machine is the [**n1-standard-1**](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker/blob/master/perfkitbenchmarker/configs/default_config_constants.yaml.)
+
+You can learn more about alternative flag values in the
+[Useful Global Flags](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker#useful-global-flags)
 section of the PKB readme.
 
-### Discover helfpul details about benchmark tests
+### Run one benchmark test with the benchmark flag
+
+The `--benchmark` flag is used to select the benchmark(s) run. Not supplying
+`--benchmark` is the same as using `--benchmarks="standard_set"`.
+The **standard_set** is a collection of commonly used benchmarks. You can read
+more about benchmark sets later in this lab.
+
+Cloud benchmark tests commonly need at least 10minutes to complete because of
+the many resources, including networks, firewall rules, and VMs, that must
+be both provisioned and de-provisioned.
+
+Start a benchmark test now, and then continue working through the lab while
+the test executes.
+
+Run the commonly used network throughput test, **iperf**, with a small
+machine, **n1-standard-1**.
+
+**Expected duration**: ~13-14min.
+
+```
+./pkb.py --benchmarks=iperf
+```
+
+**Expected output**:
+
+```
+-------------------------PerfKitBenchmarker Results Summary-------------------------
+IPERF:
+  receiving_machine_type="n1-standard-1" receiving_zone="us-central1-a" run_number="0" runtime_in_seconds="60" sending_machine_type="n1-standard-1" sending_thread_count="1" sending_zone="us-central1-a"
+  Throughput                         1966.000000 Mbits/sec                      (ip_type="external")
+  Throughput                         1968.000000 Mbits/sec                      (ip_type="internal")
+  Throughput                         1962.000000 Mbits/sec                      (ip_type="external")
+  Throughput                         1968.000000 Mbits/sec                      (ip_type="internal")
+  End to End Runtime                  787.150529 seconds
+...
+------------------------------------------
+Name   UID     Status     Failed Substatus
+------------------------------------------
+iperf  iperf0  SUCCEEDED
+------------------------------------------
+Success rate: 100.00% (1/1)
+```
+
+## Discover helfpul flags and notes about benchmark tests
+
+While **iperf** is running, explore PKB benchmarks and flags.
+
+#### Step 1
+
+Open a second Cloud Shell in GCP Console by clicking the **Add Cloud Shell
+Session** button on top of the existing Cloud Shell.
+
+#### Step 2
+
+Change to the PerfKitBenchmarker directory.
+
+```
+cd PerfKitBenchmarker
+```
+
+#### Step 3
 
 Base PKB includes the `--helpmatch` flag which can be used to discover details
 about benchmarks and related configuration flags. You can pass
 `--helpmatch` a regex and it will print related help text.
-
-#### Step 1
 
 Review all the global flags for PKB.
 
@@ -162,9 +256,9 @@ Review all the global flags for PKB.
 ./pkb.py --helpmatch=pkb
 ```
 
-#### Step 2
+#### Step 4
 
-The `--benchmarks` flag is used to select a specific benchmark or
+As used earlier, the `--benchmarks` selects a specific benchmark or
 benchmark set.
 
 Review the full list of benchmarks available.
@@ -173,60 +267,43 @@ Review the full list of benchmarks available.
 ./pkb.py --helpmatch=benchmarks | grep perfkitbenchmarker
 ```
 
-You should see around 70 different linux_benchmarks available to run.
+You should see around 70 different benchmarks available to run, within
+linux_benchmarks collection.
+
+PKB has a naming convention for benchmarks of
+**[NAME]_benchmark**. For example, notice: **ping_benchmark**,
+**iperf_benchmark**, and **netperf_benchmark**.0
 
 #### Step 3
 
-If you want to review the details of the different benchmarks, it can be
+When you want to review the details and flags of a benchmark in depth, it can be
 easier to read formatted MarkDown.
 
 One advantage of our **fork** of PKB is a new `--helpmatchmd` flag. The
-`--helpmatchmd` flag emits easily readable MarkDown text than `--helpmatch`.
+`--helpmatchmd` flag emits more easily readable MarkDown text than
+`--helpmatch`.
+
 The MarkDown from using `--helpmatchmd` has also been checked back into our
-fork [here](https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker/tree/master/testsuite_docs).
+fork in the [testsuite_docs folder](https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker/tree/master/testsuite_docs).
 
-Review the available Linux benchmarks from the MarkDown
-[here](https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker/blob/master/testsuite_docs/linux_benchmarks.md).
+Review the available Linux benchmarks from the
+[linux_benchmarks file](https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker/blob/master/testsuite_docs/linux_benchmarks.md).
 
-### Run one benchmark
+Try searching on **ping_benchmark**, **iperf_benchmark**, and
+**netperf_benchmark**.
 
-The `--benchmark` flag is used to select the benchmark(s) run. Not supplying
-`--benchmark` is the same as using `--benchmarks="standard_set"`.
-The **standard_set** is a collection of commonly used benchmarks. Other sets
-are curated and available to run as well. You can run multiple benchmarks
-by using a comma separated list.
-
-The `--machine_type` flag is used to select the cloud-specific machine.
-Alternative ways to configure machine type can be researched in the
-Useful Global Flags section of the
-[readme](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker#useful-global-flags).
-
-#### Step 1
-
-Run a common network throughput test, **iperf**, with a small
-machine, **n1-standard-2**.
-
-```
-./pkb.py --benchmarks=iperf --machine_type=n1-standard-2
-```
-
-#### Step 2
+#### Step 4
 
 Each benchmark can have custom flags too. Review the flags for the
 **netperf** and **iperf** benchmarks.
 
 ```
 ./pkb.py --helpmatchmd=netperf
+
 ./pkb.py --helpmatchmd=iperf
 ```
 
-You can see that there are multiple flags to customize **iperf** benchmark runs.
-For example, in iperf, `--iperf_runtime_in_seconds` is used to set the amount
-of time the test runs. Also, you can use `--iperf_sending_thread_count` to set
-the number of threads that iperf uses.
-
-Again, flags and descriptions for all Linux benchmarks can be found
-[here](https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker/blob/master/testsuite_docs/linux_benchmarks.md).
+You can see that there are multiple flags to customize benchmark runs.
 
 ## Considering Different Network Test Tools
 
@@ -237,8 +314,8 @@ in different situations.
 ### ping
 
 The **ping** command is the most widely distributed and is commonly used to
-verify connectivity and measure network latency. It measures the round trip
-time (rtt) of ICMP packets.
+verify connectivity and measure simple network latency. It measures the
+round trip time (rtt) of ICMP packets.
 
 ### iperf
 
@@ -247,20 +324,53 @@ using TCP or UDP streams. It supports multiple threads streaming data
 simultaneously. It has a variety of parameters that can be set to test and
 maximize throughput.
 
-**Note**: iperf3 is preferred and used in PKB.
+**Note**: as of 2019, **iperf** is the name of the benchmark, but
+**iperf v2** is used.
 
 ### netperf
 
 The **netperf** tool contains several different test types. You can use
-**TCP_RR** (TCP request response) to test network latency, or
-**TCP_STREAM** to test network throughput. You can run multiple instances of
-netperf in parallel to heavily stress links via multiple processors. The
-netperf tool also supports running UDP latency and throughput tests.
+**TCP_RR**, TCP request-response, to test network latency. You can run
+**TCP_STREAM** to test network throughput.
+
+You can run multiple instances of netperf in parallel to heavily stress links
+via multiple processors. The netperf tool also supports running UDP latency
+and throughput tests.
+
 With netperf, you can also see alternative reporting flavors with its data
 histograms.
 
 In many cases, it is recommended to run combinations of all three networking
-benchmark tools. The results can then be used to confirm results.
+benchmark tools and use added tests for result confirmation.
+
+## Explore the results of a benchmark
+
+Return to the first Cloud Shell to review the test results from **iperf**.
+
+Detailed output from the benchmark is printed to the screen, and saved to
+log files under `/tmp/perfkitbenchmarker/runs/`.
+
+Whether you scroll back in the Cloud Shell, or look through the pkb.log file,
+you can review many details of the benchmark pass:
+
+*   PKB details: version# and flags used.
+*   Resources being provisioned: an auto-mode VPC network, two firewall rules,
+    one for internal IPs and another for external IPs, two VM instances, and
+    attached persistent-disks.
+*   Software setup: Setup directories on both VMs and install python, iperf,
+    and other packages.
+*   System configuration: adjust kernel settings,
+    including **tcp_congestion_control**.
+*   Test execution:
+    *   VM1->VM2 throughput test over external IPs
+    *   VM1->VM2 throughput test over internal IPs
+    *   VM2->VM1 throughput test over external IPs
+    *   VM2->VM1 throughput test over internal IPs
+*   Resources being cleaned up.
+*   Detailed result data: includes details about the resources along with
+    metrics that include timestamp, units, and values.
+*   Results Summary: an easy-to-read table with the key metrics and values.
+*   Overall test status, especially useful when multiple benchmarks have run.
 
 ## Running Network Benchmarks
 
@@ -269,13 +379,37 @@ benchmark tools. The results can then be used to confirm results.
 Run a test to determine the latency between two machines in a single
 zone: `us-east1-b`.
 
-**Expected duration**: xxmin.
+**Expected duration**: ~11-12min.
 
 ```
+./pkb.py --benchmarks=ping --machine_type=f1-micro
 ./pkb.py --benchmarks=ping --zones=us-east1-b
 ```
 
-**Expected output**: xxx.
+**Expected output**:
+
+```
+-------------------------PerfKitBenchmarker Results Summary-------------------------
+PING:
+  ip_type="internal" receiving_zone="us-central1-a" run_number="0" sending_zone="us-central1-a"
+  Min Latency                           0.240000 ms
+  Average Latency                       0.307000 ms
+  Max Latency                           0.605000 ms
+  Latency Std Dev                       0.059000 ms
+  Min Latency                           0.171000 ms
+  Average Latency                       0.703000 ms
+  Max Latency                          35.503000 ms
+  Latency Std Dev                       3.531000 ms
+  End to End Runtime                  691.010288 seconds
+...
+----------------------------------------
+Name  UID    Status     Failed Substatus
+----------------------------------------
+ping  ping0  SUCCEEDED
+----------------------------------------
+Success rate: 100.00% (1/1)
+...
+```
 
 ### Create Config Files for More Complex Tests
 
@@ -328,6 +462,14 @@ You can also specify the full path of the config file:
 ```
 ./pkb.py --benchmark_config_file=/path/to/config/file.yml --benchmarks=iperf
 ```
+
+## Benchmark Sets
+
+Other sets
+are curated and available to run as well. You can run multiple benchmarks
+by using a comma separated list.
+
+
 
 ## Saving and Using Data with BigQuery
 

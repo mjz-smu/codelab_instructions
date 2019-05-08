@@ -449,6 +449,18 @@ The app will deploy to http://PROJECT_ID.appspot.com
 1. In Perfkit Dashboard Administration, click "Upload", and select the
 sample dashboard file: PerfKitExplorer/data/samples_mart/sample_dashboard.json
 
+### Loading the provided samples
+
+To load the sample data into BigQuery, you'll need to specify the dataset (using the one created above is fine) and table name. The `--autodetect` flag is used to figure out the schema, so the table doesn't need to exist before running the command:
+```
+bq --location=US load --autodetect --source_format=NEWLINE_DELIMITED_JSON <codelab_dataset>.<codelab_table> bq_pkb_sample.json
+```
+Before uploading the sample dashboard, replace all the BigQuery references with the dataset and table name you used to load the samples (you can edit these references in the dashboard too but this is way quicker):
+```
+sed -i 's/my_project.my_dataset.my_table/<actual_project>.<actual_dataset>.<actual_table>/g' codelab_perfkit_dashboard.json
+```
+Now you can upload the dashboard template to PKE through the administration page and experiment with some test data.
+
 ## Congratulations!
 
 You learned xxx

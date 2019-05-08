@@ -4,7 +4,12 @@
 
 ### Performance benchmarking
 
+![benchmarking process](images/benchmarking_process.png "Benchmarking Process")
+
 ### Performance benchmarking on public cloud
+
+Adds a layer of resource provisioning, including isolation, as defined by
+enclosing resources in a VPC network, and security, enforced by firewall rules.
 
 ### Introducing PerfKit Benchmarker
 
@@ -14,13 +19,13 @@ cloud providers. PKB automates setup and teardown of resources, including
 Virtual Machines (VMs), on whichever cloud provider you choose, along with
 installing and running the actual benchmark tests.
 
+#### PKB Architecture
+
+![pkb architecture](images/pkb_architecture.png "PKB Architecture")
+
 ### Performance benchmarking on Google Cloud Platform with PKB
 
 Performance benchmarking, with PKB, on Google Cloud Platform (GCP).
-
-### PKB Architecture
-
-[**TODO(truty): insert diagram about stages of performance benchmarking.**]
 
 ## What you'll do
 
@@ -157,9 +162,8 @@ command-line flags, PKB will attempt to run a standard set of benchmarks
 on default machine types in the default region. You can read more about the
 **standard_set** later in this lab.
 
-Instead, it is more common to choose specific benchmarks and options, such
-as project, cloud provider, zone, and machine_type, using
-**command-line flags**.
+Instead, it is more common to choose specific benchmarks and options
+using **command-line flags**.
 
 ### The project, cloud provider, zones, and machine_type flags
 
@@ -168,10 +172,11 @@ and `--machine_type` flags work.
 
 *   `--cloud`: As **GCP** is the default cloud provider for PKB, the
     `--cloud` flag has a default value of **GCP**.
-*   `--project`: PKB needs to have a GCP **project-id** to run. In Cloud
-    Shell, PKB inherits the `--project` **project-id** from the environment.
-*   `--zone`: Every cloud provider has a default zone. For GCP, the `--zone`
-    flag defaults to
+*   `--project`: PKB needs to have a GCP **PROJECT-ID** to run. By using Cloud
+    Shell in this lab, PKB can infer the `--project` **PROJECT-ID** from
+    the environment.
+*   `--zone`: Every cloud provider has a default zone. For GCP, the
+    `--zone` flag defaults to
     [**us-central1-a**](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker/blob/master/perfkitbenchmarker/configs/default_config_constants.yaml).
 *   `--machine_type`: Benchmarks are frequently tightly coupled to
     specific machine capabilities, especially CPU and memory. You can pick
@@ -184,10 +189,10 @@ You can learn more about alternative flag values in the
 [Useful Global Flags](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker#useful-global-flags)
 section of the PKB readme.
 
-### Run one benchmark test with the benchmark flag
+### Run one benchmark test with the benchmarks flag
 
-The `--benchmark` flag is used to select the benchmark(s) run. Not sup*plying
-`--benchmark` is the same as using `--benchmarks="standard_set"`.
+The `--benchmarks` flag is used to select the benchmark(s) run. Not supplying
+`--benchmarks` is the same as using `--benchmarks="standard_set"`.
 The **standard_set** is a collection of commonly used benchmarks. You can read
 more about benchmark sets later in this lab.
 
@@ -271,8 +276,10 @@ You should see around 70 different benchmarks available to run, within the
 linux_benchmarks collection.
 
 PKB has a naming convention for benchmarks of
-**[NAME]_benchmark**. For example, notice: **ping_benchmark**,
-**iperf_benchmark**, and **netperf_benchmark**.
+**[COLLECTION]_benchmarks.[NAME]_benchmark**. For example:
+*   linux_benchmarks.ping_benchmark
+*   linux_benchmarks.iperf_benchmark
+*   linux_benchmarks.netperf_benchmark
 
 #### Step 5
 
@@ -299,11 +306,13 @@ Each benchmark can have custom flags too. Review the flags for the
 
 ```
 ./pkb.py --helpmatchmd=netperf
+```
 
+```
 ./pkb.py --helpmatchmd=iperf
 ```
 
-You can see that there are multiple flags to customize benchmark runs.
+You can see multiple flags to customize these benchmark runs.
 
 ## Considering Different Network Test Tools
 
@@ -346,11 +355,11 @@ findings.
 
 ## Explore the results of a benchmark
 
-The **iperf** test you started, should now be completed. Retu*rn to the first
+The **iperf** test you started, should now be completed. Return to the first
 Cloud Shell to review the test results from **iperf**.
 
-Detailed output from the benchmark is printed to the terminal, and saved to
-log files under `/tmp/perfkitbenchmarker/runs/`.
+Detailed output from benchmark execution is printed to the terminal, and saved
+to log files under `/tmp/perfkitbenchmarker/runs/`.
 
 Whether you scroll back in the Cloud Shell, or look through the `pkb.log` file,
 you can review many details about the benchmark pass:
@@ -386,10 +395,13 @@ benchmarks by looking through the `--helpmatchmd` output.
 Run a test to determine the latency between two machines in a single
 zone. Supply the machine_type and/or zone.
 
-**Expected duration**: ~11-12min.
+**Expected duration**: ~11-12min. each
 
 ```
 ./pkb.py --benchmarks=ping --machine_type=f1-micro
+```
+
+```
 ./pkb.py --benchmarks=ping --zones=us-east1-b
 ```
 
@@ -484,13 +496,16 @@ flags:
   iperf_runtime_in_seconds: 30
 ```
 
-When you haave time later, run this benchmark using the config file.
+When you have time later, run this benchmark using the config file.
 
 **Expected duration**: 13-14min.
 
 ```
 ./pkb.py --benchmark_config_file=sample_config.yml --benchmarks=iperf
 ```
+
+**Note**: even though the config file includes the benchmark name, you must
+still supply the `--benchmarks` flag.
 
 **Expected output**:
 
@@ -520,14 +535,15 @@ You can also specify the full path of the config file:
 ## Benchmark Sets
 
 PKB defines curated collections of benchmark tests called **benchmark sets**.
-These sets are defined in the `perfkitbenchmarker/benchmark_sets.py` file.
+These sets are defined in the `perfkitbenchmarker/benchmark_sets.py`
+[file](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker/blob/master/perfkitbenchmarker/benchmark_sets.py).
 
 Sets include:
-*   **standard_set**:* commonly agreed upon set of cloud performance bencharks.
-*   **google_set**: slightly longer collection of benchmarks than the
-standard_set. Includes `tensorflow` benchmarks.
+*   **standard_set**: commonly agreed upon set of cloud performance benchmarks.
+*   **google_set**: slightly longer collection of benchmarks than
+    standard_set. Includes `tensorflow` benchmarks.
 *   **kubernetes_set**: collection of tests intended to run on Kubernetes
-clusters. Requires specialized setup at this time.
+    clusters. Requires specialized setup at this time.
 *   **cloudsuite_set**: collection of cloudsuite_XXX benchmarks.
 
 Other sets are defined as well.
@@ -540,35 +556,41 @@ the `--benchmarks` flag.
 By default PKB will output results to the terminal and save logs to the
 directory `/tmp/perfkitbenchmarker/runs/`.
 
-If you plan to run many tests, a recommended practice is to push your result
-data to [BigQuery](https://cloud.google.com/bigquery/), a serverless,
+A recommended practice is to push your result data to
+[BigQuery](https://cloud.google.com/bigquery/), a serverless,
 highly-scalable, cost-effective data warehouse. You can then use BigQuery to
 review your test results over time, and create data visualizations.
-*
+
 ### Create a dataset
 
-To do this, create a **dataset** where result tables and views can be
-instantiated, secured and shared. You can create datasets using the BigQuery
+To do this, initialize an empty **dataset** where result tables and views can
+be created, secured and shared. You can create datasets using the BigQuery
 UI in the GCP Console.
 
-You can also BigQuery command-line tool `bq` in Cloud Shell.
+For this lab, use the BigQuery command-line tool `bq` in Cloud Shell.
 
 ```
 bq mk example_dataset
 ```
 
+**Output**:
+
+```
+Dataset '[PROJECT-ID]:example_dataset' successfully created.
+```
+
 ### Run PKB with BigQuery arguments
 
-Then, when you run PKB, you supply BigQuery-specific arguments to send your
+Later, when you have time, you can run PKB experiments and push the results
+to BigQuery.
+
+When you run PKB, supply the BigQuery-specific arguments to send your
 result data directly to BigQuery tables.
 
-*   `--bq_project`: your GCP **Project-ID** that owns the dataset and tables.
+*   `--bq_project`: your GCP **PROJECT-ID** that owns the dataset and tables.
 *   `bigquery_table`: a fully qualified table name, including the dataset. The
     first time you run experiments, PKB will create the table if it does not
     yet exist.
-
-When you have time later, run an **iperf** benchmark test and push the test
-log data to a BigQuery table named `network_tests`.
 
 **Expected duration**: 13-14min.
 
@@ -592,24 +614,75 @@ Success rate: 100.00% (1/1)
 ...
 ```
 
+### Populate BigQuery dataset with sample data
+
+To quickly experiment with BigQuery, load sample test data from the
+PerfKit Explorer (PKE) repo. PKE is explained in more detail later in this lab.
+
+#### Step 1
+
+Open a fresh Cloud Shell in GCP Console by clicking the **Add Cloud Shell
+Session** button on top of the existing Cloud Shell.
+
+#### Step 2
+
+Clone the PKE git repository.
+
+```
+git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitExplorer.git
+```
+
+```
+cd PerfKitExplorer
+```
+
+#### Step 3
+
+Create a dataset for samples.
+
+```
+bq mk samples_mart
+```
+
+**Output**:
+
+```
+Dataset '[PROJECT-ID]:samples_mart' successfully created.
+```
+
+#### Step 4
+
+Load the `samples_mart` dataset from a file.
+
+```
+bq load --project_id=[PROJECT-ID] \
+    --source_format=NEWLINE_DELIMITED_JSON \
+    samples_mart.results \
+    ./data/samples_mart/sample_results.json \
+    ./data/samples_mart/results_table_schema.json
+```
+
+#### Step 5
+
+You can then see your data using the command-line `bq` tool, again, in
+Cloud Shell.
+
+```
+bq query 'SELECT * FROM samples_mart.results LIMIT 200'
+```
+
 You can then see your data using the
 [BigQuery UI](https://console.cloud.google.com/bigquery).
 
 Use the **Query View** to run a simple query that shows your results.
 
 ```
-SELECT * FROM example_dataset.network_tests LIMIT 200;
-```
-
-You can also use the command-line `bq` tool, again, in Cloud Shell.
-
-```
-bq query 'SELECT * FROM example_dataset.network_tests LIMIT 200'
+SELECT * FROM samples_mart.results LIMIT 200;
 ```
 
 ## Visualizing Data with PerfKit Explorer
 
-To really impact your business, though, you want to identify insights on your
+To really impact your business, though, you want to identify insights from your
 performance projects. You need to look through many passes of multiple tests
 over time. You may want to notice unexpected spikes, variations
 over time, or differences from one geography to another.
@@ -618,18 +691,71 @@ Visualization tools help you to summarize large sets of result data into
 understandable charts, and tables.
 
 **PerfKit Explorer (PKE)** is an open-source companion tool for PerfKit
-Benchmarker. With PKE, you can preload queries and views of your data
-to help you identify critical insights in your performance data.
+Benchmarker. PKE is a service and web frontend for composing queries and
+dashboards.
+
+With PKE, you can preload dashboards,queries and views of your data
+to help you identify critical insights in your performance data. PKE allows
+you to describe dashboards and queries in files that can be part of your
+change control processes.
 
 PKE operates as an App Engine application in your project.
 
-### Install required packages* for PKE
+### Review a running demo instance of PKE
 
-Install the PKE packages using the npm package manager.
+You can look through the supported performance chart-types on the
+[live deployment demo dashboard](https://perfkit-explorer.appspot.com/explore?dashboard=5714163003293696).
+
+### Install PKE and related packages
+
+Build the PKE application, in Cloud Shell, from the `PerfKitExplorer`
+directory.
+
+#### Step 1
+
+In Cloud Shell, install the prerequisite packages:
+
+```
+sudo apt-get update
+```
+
+```
+sudo apt-get install python2.7 openjdk-8-jdk git nodejs nodejs-legacy npm
+```
+
+#### Step 2
+
+Ensure that the Google App Engine SDK for Python is installed.
+
+```
+gcloud components install app-engine-python
+```
+
+```
+gcloud components install app-engine-python-extras
+```
+
+#### Step 3
+
+Use git to download required submodules including closure-library.
+
+```
+git submodule update --init
+```
+
+#### Step 4
+
+Install required packages
 
 ```
 npm install
+```
+
+```
 sudo npm install -g bower
+```
+
+```
 bower install
 ```
 
@@ -645,15 +771,15 @@ have an App Engine app running, or this will run instead
 
 #### Step 1
 
-Update the `config/data_source_config.json` file in PKE with your
+Update the `config/data_source_config.json` file in your cloned repo with your
 **project-specific** details. You are **not** required to set an
-`analytics-key`.
+`analytics-key`. You can delete the `testing` block.
 
 **Example data_source_config.json**
 
 ```
 project_id: [PROJECT-ID]
-project_name: [PROJECT-NAME>
+project_name: [PROJECT-NAME]
 samples-mart: [PROJECT-ID].example_dataset
 analytics-key:
 ```
@@ -672,6 +798,8 @@ Deploy the application to App Engine from the newly created `deploy` directory.
 
 ```
 cd deploy
+dev_appserver.py app.yaml
+
 gcloud app deploy
 ```
 
@@ -704,6 +832,14 @@ configure your dashboard using PKE.
 You installed PerfKit Benchmarker, and ran benchmark tests in the cloud.
 You learned how to build an end-to-end workflow for running benchmarks,
 gathering data, and visualizing performance trends.
+
+### Friction
+
+**For @google.com users ONLY**
+
+If you encounter friction running experiments with PKB, or visualizing
+data with PKE, make a note in our
+[friction log](https://docs.google.com/spreadsheets/d/1JudPW4rbZy8oczGb0IRVwrrVFwEBvz3nTXRNzg0QvHE/edit?usp=sharing).
 
 ### Next Steps / Learn More
 

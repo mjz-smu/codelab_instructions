@@ -246,7 +246,7 @@ The **iperf** tool is easy to use and is used to measure network throughput usin
 TCP or UDP streams. It supports multiple threads streaming data simultaneously.
 It has a variety of parameters that can be set to test and maximize throughput.
 
-**Note**: iperf3 is preferred and used in PKB.
+**Note**: iperf 2 is preferred and used in PKB.
 
 ### netperf
 
@@ -345,7 +345,7 @@ Now let's run a benchmark and push the data to our BigQuery table named
 `network_tests`
 
 ```
-    ./pkb.py --benhmarks=iperf --bigquery_table=example_dataset.network_tests> --bq_project=<project_id>
+    ./pkb.py --benhmarks=iperf --bigquery_table=example_dataset.network_tests --bq_project=<project_id>
 ```
 
 After this has finished, we can now see our data in BigQuery either by going
@@ -451,11 +451,11 @@ sample dashboard file: PerfKitExplorer/data/samples_mart/sample_dashboard.json
 
 ### Loading the provided samples
 
-To load the sample data into BigQuery, you'll need to specify the dataset (using the one created above is fine) and table name. The `--autodetect` flag is used to figure out the schema, so the table doesn't need to exist before running the command:
+For this codelab, we have provided sample data and a sample dashboard. To load the sample data into BigQuery, you'll need to specify the dataset (using the one created above is fine) and table name. The `--autodetect` flag is used to figure out the schema, so the table doesn't need to exist before running the command:
 ```
-bq --location=US load --autodetect --source_format=NEWLINE_DELIMITED_JSON <codelab_dataset>.<codelab_table> bq_pkb_sample.json
+bq --location=US load --autodetect --source_format=NEWLINE_DELIMITED_JSON <dataset>.<table> bq_pkb_sample.json
 ```
-Before uploading the sample dashboard, replace all the BigQuery references with the dataset and table name you used to load the samples (you can edit these references in the dashboard too but this is way quicker):
+The sample dashboard is stored in a json file. Before uploading the sample dashboard, replace all the BigQuery references with the dataset and table name you used to load the samples (you can edit these references in the dashboard too but this is way quicker):
 ```
 sed -i 's/my_project.my_dataset.my_table/<actual_project>.<actual_dataset>.<actual_table>/g' codelab_perfkit_dashboard.json
 ```

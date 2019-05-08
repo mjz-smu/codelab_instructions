@@ -30,10 +30,12 @@ Performance benchmarking, with PKB, on Google Cloud Platform (GCP).
 ## What you'll do
 
 *   Install PerfKit Benchmarker
+*   Explore PKB command-line flags
+*   Consider different network benchmarks
 *   Run benchmark tests using PerfKit Benchmarker
 *   Inspect and using custom configuration files for tests
-*   Persist test result data
-*   Query and visualize result data
+*   Persist test result data to BigQuery
+*   Query and visualize result data with PerfKit Explorer
 
 ## Prerequisites
 
@@ -405,31 +407,6 @@ zone. Supply the machine_type and/or zone.
 ./pkb.py --benchmarks=ping --zones=us-east1-b
 ```
 
-**Expected output**:
-
-```
--------------------------PerfKitBenchmarker Results Summary-------------------------
-PING:
-  ip_type="internal" receiving_zone="us-central1-a" run_number="0" sending_zone="us-central1-a"
-  Min Latency                           0.240000 ms
-  Average Latency                       0.307000 ms
-  Max Latency                           0.605000 ms
-  Latency Std Dev                       0.059000 ms
-  Min Latency                           0.171000 ms
-  Average Latency                       0.703000 ms
-  Max Latency                          35.503000 ms
-  Latency Std Dev                       3.531000 ms
-  End to End Runtime                  691.010288 seconds
-...
-----------------------------------------
-Name  UID    Status     Failed Substatus
-----------------------------------------
-ping  ping0  SUCCEEDED
-----------------------------------------
-Success rate: 100.00% (1/1)
-...
-```
-
 ### Measure latency and throughput with netperf
 
 Run a test to determine the throughput and latency between two machines in a
@@ -446,21 +423,6 @@ kernel/system configuration changes.
 
 ```
 ./pkb.py --benchmarks=netperf
-```
-
-**Expected output**:
-
-```
--------------------------PerfKitBenchmarker Results Summary-------------------------
-NETPERF:
-...
-----------------------------------------
-Name  UID    Status     Failed Substatus
-----------------------------------------
-netperf  netperf0  SUCCEEDED
-----------------------------------------
-Success rate: 100.00% (1/1)
-...
 ```
 
 ## Create Config Files for More Complex Tests
@@ -595,23 +557,9 @@ result data directly to BigQuery tables.
 **Expected duration**: 13-14min.
 
 ```
-    ./pkb.py --benhmarks=iperf \
-        --bq_project=[PROJECT-ID] \
-        --bigquery_table=example_dataset.network_tests
-```
-
-**Expected output**:
-```
--------------------------PerfKitBenchmarker Results Summary-------------------------
-IPERF:
-...
-----------------------------------------
-Name  UID    Status     Failed Substatus
-----------------------------------------
-iperf  iperf0  SUCCEEDED
-----------------------------------------
-Success rate: 100.00% (1/1)
-...
+./pkb.py --benhmarks=iperf \
+    --bq_project=[PROJECT-ID] \
+    --bigquery_table=example_dataset.network_tests
 ```
 
 ### Populate BigQuery dataset with sample data
@@ -662,16 +610,15 @@ bq load --project_id=[PROJECT-ID] \
     ./data/samples_mart/results_table_schema.json
 ```
 
-#### Step 5
+### Query sample data in BigQuery
 
-You can then see your data using the command-line `bq` tool, again, in
-Cloud Shell.
+You can see your data using the command-line `bq` tool, again, in Cloud Shell.
 
 ```
 bq query 'SELECT * FROM samples_mart.results LIMIT 200'
 ```
 
-You can then see your data using the
+You can also see your data using the
 [BigQuery UI](https://console.cloud.google.com/bigquery).
 
 Use the **Query View** to run a simple query that shows your results.
@@ -705,6 +652,8 @@ PKE operates as an App Engine application in your project.
 
 You can look through the supported performance chart-types on the
 [live deployment demo dashboard](https://perfkit-explorer.appspot.com/explore?dashboard=5714163003293696).
+
+![pke demo dashboard](images/pke_demo_dashboard.png "PKE Demo Dashboard")
 
 ### Install PKE and related packages
 
@@ -795,6 +744,7 @@ bash compile.sh
 #### Step 3
 
 Deploy the application to App Engine from the newly created `deploy` directory.
+Run the application using the App Engine test emulator `dev_appserver.py`.
 
 ```
 cd deploy
@@ -805,11 +755,15 @@ gcloud app deploy
 
 The app will deploy to http://PROJECT-ID.appspot.com
 
+You now have a live PKE application running on port 8080.
+
 ### Load a dashboard configuration
 
 #### Step 1
 
 Open the project URL http://PROJECT_ID.appspot.com in your browser.
+Open the running PKE application using the Cloud Shell **Web Preview** button,
+then **Preview on port 8080**.
 
 #### Step 2
 
@@ -827,9 +781,22 @@ sample dashboard file:
 Now you can browse through a working dashboard to get an idea how you might
 configure your dashboard using PKE.
 
+## Cleanup
+
+*   Deployment files in Cloud Storage
+*
+
 ## Congratulations!
 
+You have completed the PerfKitBenchmarker code lab!
+
+### What you covered
+
 You installed PerfKit Benchmarker, and ran benchmark tests in the cloud.
+
+You learned about PKB command-line flags, and a few different network
+benchmarks.
+
 You learned how to build an end-to-end workflow for running benchmarks,
 gathering data, and visualizing performance trends.
 
@@ -841,11 +808,16 @@ If you encounter friction running experiments with PKB, or visualizing
 data with PKE, make a note in our
 [friction log](https://docs.google.com/spreadsheets/d/1JudPW4rbZy8oczGb0IRVwrrVFwEBvz3nTXRNzg0QvHE/edit?usp=sharing).
 
-### Next Steps / Learn More
+### Next Steps
 
 *   Run more benchmark tests!
-*   Develop more dashboards.
-*   Watch the Perfkit Benchmarker video from Google Cloud Next '19.
+*   Develop more dashboards in PKE.
+
+### Learn More
+
+*   Watch the
+    [Performance Benchmarking video](https://youtu.be/fNMzlTmufy0)
+    from Google Cloud Next '19.
 *   Follow the
     [PKB repo](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker). Look
     for upcoming improvements in running container benchmarks.

@@ -705,13 +705,9 @@ bower install
 
 ### Compile and deploy the dashboard as an App Engine application
 
-**TODO(truty): create a non-default AppEngine application**
-
-``` Get rid of this
-Next we need to compile and deploy this as an App Engine Application. Make
-sure you are doing this on a Google CLoud Project where you do not already
-have an App Engine app running, or this will run instead
-```
+**Note**: this procedure generates an **default** App Engine application.
+If you already have a **default** application, this procedure will replace
+it as a new version. Consider a new, empty project if this is a problem.
 
 #### Step 1
 
@@ -724,18 +720,35 @@ bash compile.sh
 #### Step 2
 
 Deploy the application to App Engine from the newly created `deploy` directory.
-Run the application using the App Engine test emulator `dev_appserver.py`.
 
 ```
 cd deploy
-dev_appserver.py app.yaml
+```
 
+```
 gcloud app deploy
 ```
 
-The app will deploy to http://PROJECT-ID.appspot.com
+**Command output**
 
-You now have a live PKE application running on port 8080.
+```
+target url:      [https://[PROJECT-ID].appspot.com]
+
+
+Do you want to continue (Y/n)?  y
+
+Beginning deployment of service [default]...
+File upload done.
+Updating service [default]...done.
+Setting traffic split for service [default]...done.
+Deployed service [default] to [https://[PROJECT-ID].appspot.com]
+```
+
+Choose the nearest region to deploy the application.
+
+The app will deploy to https://[PROJECT-ID].appspot.com
+
+You now have a live PKE application running, listening on port 80.
 
 ### Load a larger set of sample data to visualize
 
@@ -771,8 +784,6 @@ Upload complete.
 Waiting on bqjob_xxxx ... (1s) Current status: DONE
 ```
 
-bq --location=US load --autodetect --source_format=NEWLINE_DELIMITED_JSON <dataset>.<table> data/codelab/bq_pkb_sample.json
-
 ### Prepare a dashboard configuration file
 
 The sample dashboard configuration is stored in a json file. Edit and download
@@ -807,9 +818,7 @@ You can see what to pass for USERNAME with `echo $USER`.
 
 #### Step 1
 
-Open the project URL http://PROJECT_ID.appspot.com in your browser.
-Open the running PKE application using the Cloud Shell **Web Preview** button,
-then **Preview on port 8080**.
+Open the project URL https://[PROJECT-ID].appspot.com in your browser.
 
 #### Step 2
 
@@ -821,6 +830,8 @@ Click **Edit Config** in the gear icon at the top right, and set the
 In **Perfkit Dashboard Administration**, click **Upload**, and select the
 sample dashboard file you downloaded: `codelab_perfkit_dashboard.json`.
 
+Clear the username so it defaults to the current user.
+
 #### Step 3
 
 Now you can browse through a working dashboard to get an idea how you might
@@ -829,7 +840,7 @@ configure your dashboard using PKE.
 ## Cleanup
 
 *   Deployment files in Cloud Storage
-*   AppEngine app?
+*   AppEngine app
 
 ## Congratulations!
 

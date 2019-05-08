@@ -610,6 +610,13 @@ bq load --project_id=[PROJECT-ID] \
     ./data/samples_mart/results_table_schema.json
 ```
 
+**Command output**
+
+```
+Upload complete.
+Waiting on bqjob_xxxx ... (1s) Current status: DONE
+```
+
 ### Query sample data in BigQuery
 
 You can see your data using the command-line `bq` tool, again, in Cloud Shell.
@@ -708,28 +715,13 @@ have an App Engine app running, or this will run instead
 
 #### Step 1
 
-Update the `config/data_source_config.json` file in your cloned repo with your
-**project-specific** details. You are **not** required to set an
-`analytics-key`. You can delete the `testing` block.
-
-**Example data_source_config.json**
-
-```
-project_id: [PROJECT-ID]
-project_name: [PROJECT-NAME]
-samples-mart: [PROJECT-ID].example_dataset
-analytics-key:
-```
-
-#### Step 2
-
 Compile the application.
 
 ```
 bash compile.sh
 ```
 
-#### Step 3
+#### Step 2
 
 Deploy the application to App Engine from the newly created `deploy` directory.
 Run the application using the App Engine test emulator `dev_appserver.py`.
@@ -769,9 +761,17 @@ bq load --project_id=[PROJECT-ID] \
     --autodetect \
     --source_format=NEWLINE_DELIMITED_JSON \
     example_dataset.results \
-    ./data/samples_mart/sample_results.json \
-    ./data/samples_mart/results_table_schema.json
+    ./data/codelab/bq_pkb_sample.json
 ```
+
+**Command output**
+
+```
+Upload complete.
+Waiting on bqjob_xxxx ... (1s) Current status: DONE
+```
+
+bq --location=US load --autodetect --source_format=NEWLINE_DELIMITED_JSON <dataset>.<table> data/codelab/bq_pkb_sample.json
 
 ### Prepare a dashboard configuration file
 

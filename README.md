@@ -234,7 +234,7 @@ iperf  iperf0  SUCCEEDED
 Success rate: 100.00% (1/1)
 ```
 
-## Discover helfpul flags and notes about benchmark tests
+## Discovering helfpul flags and notes about benchmark tests
 
 While **iperf** is running, explore PKB benchmarks and flags.
 
@@ -355,7 +355,7 @@ In many cases, it is recommended to run combinations of all three networking
 benchmark tools and use the additional test result data to confirm your
 findings.
 
-## Explore the results of a benchmark
+## Exploring the results of a benchmark
 
 The **iperf** test you started, should now be completed. Return to the first
 Cloud Shell to review the test results from **iperf**.
@@ -425,7 +425,7 @@ kernel/system configuration changes.
 ./pkb.py --benchmarks=netperf
 ```
 
-## Create Config Files for More Complex Tests
+## Creating Config Files for More Complex Tests
 
 The easiest way To run networking benchmarks between two specific zones with
 specific flags is to use **benchmark configuration files**. For example, the
@@ -494,7 +494,7 @@ You can also specify the full path of the config file:
 ./pkb.py --benchmark_config_file=/path/to/config/file.yml --benchmarks=iperf
 ```
 
-## Benchmark Sets
+## Understanding Benchmark Sets
 
 PKB defines curated collections of benchmark tests called **benchmark sets**.
 These sets are defined in the `perfkitbenchmarker/benchmark_sets.py`
@@ -550,7 +550,7 @@ When you run PKB, supply the BigQuery-specific arguments to send your
 result data directly to BigQuery tables.
 
 *   `--bq_project`: your GCP **PROJECT-ID** that owns the dataset and tables.
-*   `bigquery_table`: a fully qualified table name, including the dataset. The
+*   `--bigquery_table`: a fully qualified table name, including the dataset. The
     first time you run experiments, PKB will create the table if it does not
     yet exist.
 
@@ -641,7 +641,7 @@ understandable charts, and tables.
 Benchmarker. PKE is a service and web frontend for composing queries and
 dashboards.
 
-With PKE, you can preload dashboards,queries and views of your data
+With PKE, you can preload dashboards, queries, and views of your data
 to help you identify critical insights in your performance data. PKE allows
 you to describe dashboards and queries in files that can be part of your
 change control processes.
@@ -674,25 +674,13 @@ sudo apt-get install python2.7 openjdk-8-jdk git nodejs nodejs-legacy npm
 
 #### Step 2
 
-Ensure that the Google App Engine SDK for Python is installed.
-
-```
-gcloud components install app-engine-python
-```
-
-```
-gcloud components install app-engine-python-extras
-```
-
-#### Step 3
-
 Use git to download required submodules including closure-library.
 
 ```
 git submodule update --init
 ```
 
-#### Step 4
+#### Step 3
 
 Install required packages
 
@@ -757,7 +745,65 @@ The app will deploy to http://PROJECT-ID.appspot.com
 
 You now have a live PKE application running on port 8080.
 
-### Load a dashboard configuration
+### Load a larger set of sample data to visualize
+
+To demonstrate the capabilities of PKE, load a larger collection of demo data
+and a dashboard configuration.
+
+#### Step 1
+
+Ensure you run from the `PerfKitExplorer` directory
+
+```
+cd PerfKitExplorer
+```
+
+#### Step 2
+
+Load data to the `example_dataset` dataset from a file. The --autodetect flag
+is used to autodetect the table schema. The table does not need to exist before
+running the command.
+
+```
+bq load --project_id=[PROJECT-ID] \
+    --autodetect \
+    --source_format=NEWLINE_DELIMITED_JSON \
+    example_dataset.results \
+    ./data/samples_mart/sample_results.json \
+    ./data/samples_mart/results_table_schema.json
+```
+
+### Prepare a dashboard configuration file
+
+The sample dashboard configuration is stored in a json file. Edit and download
+it to your local machine.
+
+#### Step 1
+
+First, replace all references to the BigQuery dataset and tables.
+
+```
+sed -i 's/my_project.my_dataset.my_table/[PROJECT-ID].example_dataset.results/g' \
+    ./data/codelab/codelab_perfkit_dashboard.json
+```
+
+#### Step 2
+
+Download the file from the Cloud Shell to your local machine.
+
+From Cloud Shell click the
+![cloudshell tools menu](images/cloudshell_tools_menu.png "CloudShell Tools")
+then **Download file**.
+
+Name the file:
+
+```
+/home/[USERNAME]/PerfKitExplorer/data/codelab/codelab_perfkit_dashboard.json
+```
+
+You can see what to pass for USERNAME with `echo $USER`.
+
+### Load the dashboard configuration file into the application
 
 #### Step 1
 
@@ -773,8 +819,7 @@ Click **Edit Config** in the gear icon at the top right, and set the
 #### Step 3
 
 In **Perfkit Dashboard Administration**, click **Upload**, and select the
-sample dashboard file:
-`PerfKitExplorer/data/samples_mart/sample_dashboard.json`.
+sample dashboard file you downloaded: `codelab_perfkit_dashboard.json`.
 
 #### Step 3
 
@@ -784,7 +829,7 @@ configure your dashboard using PKE.
 ## Cleanup
 
 *   Deployment files in Cloud Storage
-*
+*   AppEngine app?
 
 ## Congratulations!
 

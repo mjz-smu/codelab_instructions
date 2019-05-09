@@ -569,7 +569,7 @@ result data directly to BigQuery tables.
 **Expected duration**: 13-14min.
 
 ```
-./pkb.py --benhmarks=iperf \
+./pkb.py --benchmarks=iperf \
     --bq_project=[PROJECT-ID] \
     --bigquery_table=example_dataset.network_tests
 ```

@@ -93,7 +93,7 @@ authenticated:
 gcloud auth list
 ```
 
-**Command output**
+**Expected output**
 
 ```
 Credentialed accounts:
@@ -111,7 +111,7 @@ In Cloud Shell, Verify your project is set up as expected.
 gcloud config list project
 ```
 
-**Command output**
+**Expected output**
 
 ```
 [core]
@@ -124,7 +124,7 @@ If it is not, you can set it with this command:
 gcloud config set project <PROJECT_ID>
 ```
 
-**Command output**
+**Expected output**
 
 ```
 Updated property [core/project].
@@ -144,6 +144,10 @@ has a few extra features which will be merged back to the main repo soon.
 In Cloud Shell, `clone` the PerfKitBenchmarker repository.
 
 ```
+cd ~
+```
+
+```
 git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker.git
 ```
 
@@ -152,7 +156,7 @@ git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarke
 Change to the PerfKitBenchmarker directory.
 
 ```
-cd PerfKitBenchmarker
+cd ~/PerfKitBenchmarker
 ```
 
 #### Step 3
@@ -260,7 +264,7 @@ Session** button on top of the existing Cloud Shell.
 Change to the PerfKitBenchmarker directory.
 
 ```
-cd PerfKitBenchmarker
+cd ~/PerfKitBenchmarker
 ```
 
 #### Step 3
@@ -525,7 +529,7 @@ Other sets are defined as well.
 You can also run multiple benchmarks by using a comma separated list with
 the `--benchmarks` flag.
 
-## Saving and Reviewing Data with BigQuery
+## Reviewing Performance Data with BigQuery
 
 By default PKB will output results to the terminal and save logs to the
 directory `/tmp/perfkitbenchmarker/runs/`.
@@ -534,45 +538,6 @@ A recommended practice is to push your result data to
 [BigQuery](https://cloud.google.com/bigquery/), a serverless,
 highly-scalable, cost-effective data warehouse. You can then use BigQuery to
 review your test results over time, and create data visualizations.
-
-### Create a dataset
-
-To do this, initialize an empty **dataset** where result tables and views can
-be created, secured and shared. You can create datasets using the BigQuery
-UI in the GCP Console.
-
-For this lab, use the BigQuery command-line tool `bq` in Cloud Shell.
-
-```
-bq mk example_dataset
-```
-
-**Output**:
-
-```
-Dataset '[PROJECT-ID]:example_dataset' successfully created.
-```
-
-### Run PKB with BigQuery arguments
-
-Later, when you have time, you can run PKB experiments and push the results
-to BigQuery.
-
-When you run PKB, supply the BigQuery-specific arguments to send your
-result data directly to BigQuery tables.
-
-*   `--bq_project`: your GCP **PROJECT-ID** that owns the dataset and tables.
-*   `--bigquery_table`: a fully qualified table name, including the dataset. The
-    first time you run experiments, PKB will create the table if it does not
-    yet exist.
-
-**Expected duration**: 13-14min.
-
-```
-./pkb.py --benhmarks=iperf \
-    --bq_project=[PROJECT-ID] \
-    --bigquery_table=example_dataset.network_tests
-```
 
 ### Populate BigQuery dataset with sample data
 
@@ -589,14 +554,25 @@ Session** button on top of the existing Cloud Shell.
 Clone the PKE git repository.
 
 ```
+cd ~
+```
+
+```
 git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitExplorer.git
 ```
 
 ```
-cd PerfKitExplorer
+cd ~/PerfKitExplorer
 ```
 
 #### Step 3
+
+Initialize an empty **dataset** where result tables and views can
+be created, secured and shared. 
+
+For this lab, use the BigQuery command-line tool `bq` in Cloud Shell.
+
+You can also create datasets using the BigQuery UI in the GCP Console.
 
 Create a dataset for samples.
 
@@ -604,11 +580,13 @@ Create a dataset for samples.
 bq mk samples_mart
 ```
 
-**Output**:
+**Expected output**
 
 ```
 Dataset '[PROJECT-ID]:samples_mart' successfully created.
 ```
+
+**Note**: For this lab, use the BigQuery command-line tool `bq` in Cloud Shell.
 
 #### Step 4
 
@@ -622,7 +600,7 @@ bq load --project_id=[PROJECT-ID] \
     ./data/samples_mart/results_table_schema.json
 ```
 
-**Command output**
+**Expected output**
 
 ```
 Upload complete.
@@ -645,6 +623,52 @@ Use the **Query View** to run a simple query that shows your results.
 ```
 SELECT * FROM samples_mart.results LIMIT 200;
 ```
+
+## Pushing Data to BigQuery with PKB
+
+When you are ready to run benchmark sets, and push your results
+to BigQuery, you need to use special command-line flags.
+
+### Create a dataset
+
+Initialize an empty dataset where result tables and views can be created,
+secured and shared.
+
+Use the BigQuery command-line tool `bq` in Cloud Shell.
+
+```
+bq mk example_dataset
+```
+
+**Expected output**
+
+```
+Dataset '[PROJECT-ID]:example_dataset' successfully created.
+```
+
+### Run PKB with BigQuery arguments
+
+Run PKB experiments and push the results to BigQuery.
+
+When you run PKB, supply the BigQuery-specific arguments to send your
+result data directly to BigQuery tables.
+
+*   `--bq_project`: your GCP **PROJECT-ID** that owns the dataset and tables.
+*   `--bigquery_table`: a fully qualified table name, including the dataset. The
+    first time you run experiments, PKB will create the table if it does not
+    yet exist.
+
+**Expected duration**: 13-14min.
+
+```
+./pkb.py --benchmarks=iperf \
+    --bq_project=[PROJECT-ID] \
+    --bigquery_table=example_dataset.network_tests
+```
+
+You can now query `example_dataset` for result data. You will learn to visualize
+this data, in the next section.
+
 
 ## Visualizing Data with PerfKit Explorer
 
@@ -686,6 +710,14 @@ directory.
 
 #### Step 1
 
+Ensure you run from the `PerfKitExplorer` directory
+
+```
+cd ~/PerfKitExplorer
+```
+
+#### Step 2
+
 In Cloud Shell, install the prerequisite packages:
 
 ```
@@ -696,7 +728,7 @@ sudo apt-get update
 sudo apt-get -y install python2.7 openjdk-8-jdk git nodejs nodejs-legacy npm
 ```
 
-#### Step 2
+#### Step 3
 
 Use git to download required submodules including closure-library.
 
@@ -704,7 +736,7 @@ Use git to download required submodules including closure-library.
 git submodule update --init
 ```
 
-#### Step 3
+#### Step 4
 
 Install required packages
 
@@ -748,7 +780,7 @@ cd deploy
 gcloud app deploy
 ```
 
-**Command output**
+**Expected output**
 
 ```
 target url:      [https://[PROJECT-ID].appspot.com]
@@ -776,13 +808,30 @@ and a dashboard configuration.
 
 #### Step 1
 
-Ensure you run from the `PerfKitExplorer` directory
+If you did not already do this earlier, initialize an empty dataset 
+where result tables and views can be created, secured and shared.
+
+Use the BigQuery command-line tool `bq` in Cloud Shell.
 
 ```
-cd PerfKitExplorer
+bq mk example_dataset
+```
+
+**Expected output**
+
+```
+Dataset '[PROJECT-ID]:example_dataset' successfully created.
 ```
 
 #### Step 2
+
+Ensure you run from the `PerfKitExplorer` directory
+
+```
+cd ~/PerfKitExplorer
+```
+
+#### Step 3
 
 Load data to the `example_dataset` dataset from a file. The --autodetect flag
 is used to autodetect the table schema. The table does not need to exist before
@@ -796,7 +845,7 @@ bq load --project_id=[PROJECT-ID] \
     ./data/codelab/bq_pkb_sample.json
 ```
 
-**Command output**
+**Expected output**
 
 ```
 Upload complete.
@@ -837,7 +886,7 @@ You can see what to pass for username with `echo $user`.
 
 #### Step 1
 
-Open the project url https://[project-id].appspot.com in your browser.
+Open the project url `https://[project-id].appspot.com` in your browser.
 
 #### Step 2
 
@@ -863,9 +912,13 @@ configure your dashboard using PKE.
 
 Choose **All dashboards** from the left dashboard list.
 
+![all dashboards](images/all_dashboards.png "All Dashboards")
+
 Open the **codelab_daily_tests** dashboard.
 
 Enjoy.
+
+**Expected output**
 
 ![pke daily](images/pke_daily_dashboard.png "PKE Daily")
 
@@ -873,13 +926,18 @@ Enjoy.
 
 Review the query behind one of the chart widgets.
 
-*   Click the **Distinct tests run** widget, the first table.
-*   Review widget properties in the opened pane to the left.
-*   Click **Edit SQL** on the top menu to see the actual query of data
-    from your BigQuery table.
+Click the **Distinct tests run** widget, the first table.
+![distinct tests](images/distinct_tests.png "Distinct Tests")
 
-Look through the other example chart widgets to see how you
-might construct your dashboards.
+Review widget properties in the opened pane to the left.
+
+Click **Edit SQL** on the top menu to see the actual query of data
+    from your BigQuery table.
+![edit sql](images/edit_sql.png "Edit SQL")
+
+Look through the other example chart widgets, properties, and queries to see 
+how you might construct your dashboards.
+
 
 ## Cleanup
 
@@ -891,7 +949,8 @@ From **GCP Console** > **Storage** > **Browser**, delete:
 
 At this time, you cannot delete the **default** service in your App Engine
 application. If you have previous service versions, you can delete the version
-added by this lab through the GCP Console > App Engine > Versions pages.
+added by this lab through the 
+**GCP Console** > **App Engine** > **Versions** pages.
 
 ## Congratulations!
 

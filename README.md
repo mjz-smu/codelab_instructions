@@ -525,7 +525,7 @@ Other sets are defined as well.
 You can also run multiple benchmarks by using a comma separated list with
 the `--benchmarks` flag.
 
-## Saving and Reviewing Data with BigQuery
+## Reviewing Performance Data with BigQuery
 
 By default PKB will output results to the terminal and save logs to the
 directory `/tmp/perfkitbenchmarker/runs/`.
@@ -534,45 +534,6 @@ A recommended practice is to push your result data to
 [BigQuery](https://cloud.google.com/bigquery/), a serverless,
 highly-scalable, cost-effective data warehouse. You can then use BigQuery to
 review your test results over time, and create data visualizations.
-
-### Create a dataset
-
-To do this, initialize an empty **dataset** where result tables and views can
-be created, secured and shared. You can create datasets using the BigQuery
-UI in the GCP Console.
-
-For this lab, use the BigQuery command-line tool `bq` in Cloud Shell.
-
-```
-bq mk example_dataset
-```
-
-**Output**:
-
-```
-Dataset '[PROJECT-ID]:example_dataset' successfully created.
-```
-
-### Run PKB with BigQuery arguments
-
-Later, when you have time, you can run PKB experiments and push the results
-to BigQuery.
-
-When you run PKB, supply the BigQuery-specific arguments to send your
-result data directly to BigQuery tables.
-
-*   `--bq_project`: your GCP **PROJECT-ID** that owns the dataset and tables.
-*   `--bigquery_table`: a fully qualified table name, including the dataset. The
-    first time you run experiments, PKB will create the table if it does not
-    yet exist.
-
-**Expected duration**: 13-14min.
-
-```
-./pkb.py --benchmarks=iperf \
-    --bq_project=[PROJECT-ID] \
-    --bigquery_table=example_dataset.network_tests
-```
 
 ### Populate BigQuery dataset with sample data
 
@@ -598,6 +559,13 @@ cd PerfKitExplorer
 
 #### Step 3
 
+Initialize an empty **dataset** where result tables and views can
+be created, secured and shared. 
+
+For this lab, use the BigQuery command-line tool `bq` in Cloud Shell.
+
+You can also create datasets using the BigQuery UI in the GCP Console.
+
 Create a dataset for samples.
 
 ```
@@ -609,6 +577,8 @@ bq mk samples_mart
 ```
 Dataset '[PROJECT-ID]:samples_mart' successfully created.
 ```
+
+**Note**: For this lab, use the BigQuery command-line tool `bq` in Cloud Shell.
 
 #### Step 4
 
@@ -645,6 +615,52 @@ Use the **Query View** to run a simple query that shows your results.
 ```
 SELECT * FROM samples_mart.results LIMIT 200;
 ```
+
+## Pushing Data to BigQuery with PKB
+
+When you are ready to run benchmark sets, and push your results
+to BigQuery, you need to use special command-line flags.
+
+### Create a dataset
+
+Initialize an empty dataset where result tables and views can be created,
+secured and shared.
+
+Use the BigQuery command-line tool `bq` in Cloud Shell.
+
+```
+bq mk example_dataset
+```
+
+**Output**:
+
+```
+Dataset '[PROJECT-ID]:example_dataset' successfully created.
+```
+
+### Run PKB with BigQuery arguments
+
+Run PKB experiments and push the results to BigQuery.
+
+When you run PKB, supply the BigQuery-specific arguments to send your
+result data directly to BigQuery tables.
+
+*   `--bq_project`: your GCP **PROJECT-ID** that owns the dataset and tables.
+*   `--bigquery_table`: a fully qualified table name, including the dataset. The
+    first time you run experiments, PKB will create the table if it does not
+    yet exist.
+
+**Expected duration**: 13-14min.
+
+```
+./pkb.py --benchmarks=iperf \
+    --bq_project=[PROJECT-ID] \
+    --bigquery_table=example_dataset.network_tests
+```
+
+You can now query `example_dataset` for result data. You will learn to visualize
+this data, in the next section.
+
 
 ## Visualizing Data with PerfKit Explorer
 

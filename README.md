@@ -686,6 +686,14 @@ directory.
 
 #### Step 1
 
+Ensure you run from the `PerfKitExplorer` directory
+
+```
+cd PerfKitExplorer
+```
+
+#### Step 2
+
 In Cloud Shell, install the prerequisite packages:
 
 ```
@@ -696,7 +704,7 @@ sudo apt-get update
 sudo apt-get -y install python2.7 openjdk-8-jdk git nodejs nodejs-legacy npm
 ```
 
-#### Step 2
+#### Step 3
 
 Use git to download required submodules including closure-library.
 
@@ -704,7 +712,7 @@ Use git to download required submodules including closure-library.
 git submodule update --init
 ```
 
-#### Step 3
+#### Step 4
 
 Install required packages
 

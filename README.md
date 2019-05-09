@@ -720,6 +720,12 @@ sudo npm install -g bower
 bower install
 ```
 
+During the bower installation process, you may be asked to select a suitable
+version of angular. We want to select one of the options that resolves
+to angular version 1.5.8. In the example below, we chose option 2.
+
+![bower installation](images/bower_install.png "Benchmarking Process")
+
 ### Compile and deploy the dashboard as an App Engine application
 
 #### Step 1

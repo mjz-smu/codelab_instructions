@@ -93,7 +93,7 @@ authenticated:
 gcloud auth list
 ```
 
-**Command output**
+**Expected output**
 
 ```
 Credentialed accounts:
@@ -111,7 +111,7 @@ In Cloud Shell, Verify your project is set up as expected.
 gcloud config list project
 ```
 
-**Command output**
+**Expected output**
 
 ```
 [core]
@@ -124,7 +124,7 @@ If it is not, you can set it with this command:
 gcloud config set project <PROJECT_ID>
 ```
 
-**Command output**
+**Expected output**
 
 ```
 Updated property [core/project].
@@ -144,6 +144,10 @@ has a few extra features which will be merged back to the main repo soon.
 In Cloud Shell, `clone` the PerfKitBenchmarker repository.
 
 ```
+cd ~
+```
+
+```
 git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker.git
 ```
 
@@ -152,7 +156,7 @@ git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarke
 Change to the PerfKitBenchmarker directory.
 
 ```
-cd PerfKitBenchmarker
+cd ~/PerfKitBenchmarker
 ```
 
 #### Step 3
@@ -260,7 +264,7 @@ Session** button on top of the existing Cloud Shell.
 Change to the PerfKitBenchmarker directory.
 
 ```
-cd PerfKitBenchmarker
+cd ~/PerfKitBenchmarker
 ```
 
 #### Step 3
@@ -550,11 +554,15 @@ Session** button on top of the existing Cloud Shell.
 Clone the PKE git repository.
 
 ```
+cd ~
+```
+
+```
 git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitExplorer.git
 ```
 
 ```
-cd PerfKitExplorer
+cd ~/PerfKitExplorer
 ```
 
 #### Step 3
@@ -572,7 +580,7 @@ Create a dataset for samples.
 bq mk samples_mart
 ```
 
-**Output**:
+**Expected output**
 
 ```
 Dataset '[PROJECT-ID]:samples_mart' successfully created.
@@ -592,7 +600,7 @@ bq load --project_id=[PROJECT-ID] \
     ./data/samples_mart/results_table_schema.json
 ```
 
-**Command output**
+**Expected output**
 
 ```
 Upload complete.
@@ -632,7 +640,7 @@ Use the BigQuery command-line tool `bq` in Cloud Shell.
 bq mk example_dataset
 ```
 
-**Output**:
+**Expected output**
 
 ```
 Dataset '[PROJECT-ID]:example_dataset' successfully created.
@@ -705,7 +713,7 @@ directory.
 Ensure you run from the `PerfKitExplorer` directory
 
 ```
-cd PerfKitExplorer
+cd ~/PerfKitExplorer
 ```
 
 #### Step 2
@@ -772,7 +780,7 @@ cd deploy
 gcloud app deploy
 ```
 
-**Command output**
+**Expected output**
 
 ```
 target url:      [https://[PROJECT-ID].appspot.com]
@@ -800,13 +808,30 @@ and a dashboard configuration.
 
 #### Step 1
 
-Ensure you run from the `PerfKitExplorer` directory
+If you did not already do this earlier, initialize an empty dataset 
+where result tables and views can be created, secured and shared.
+
+Use the BigQuery command-line tool `bq` in Cloud Shell.
 
 ```
-cd PerfKitExplorer
+bq mk example_dataset
+```
+
+**Expected output**
+
+```
+Dataset '[PROJECT-ID]:example_dataset' successfully created.
 ```
 
 #### Step 2
+
+Ensure you run from the `PerfKitExplorer` directory
+
+```
+cd ~/PerfKitExplorer
+```
+
+#### Step 3
 
 Load data to the `example_dataset` dataset from a file. The --autodetect flag
 is used to autodetect the table schema. The table does not need to exist before
@@ -820,7 +845,7 @@ bq load --project_id=[PROJECT-ID] \
     ./data/codelab/bq_pkb_sample.json
 ```
 
-**Command output**
+**Expected output**
 
 ```
 Upload complete.
@@ -886,6 +911,7 @@ Now you can browse through a working dashboard to get an idea how you might
 configure your dashboard using PKE.
 
 Choose **All dashboards** from the left dashboard list.
+![all dashboards](images/all_dashboards.png "All Dashboards")
 
 Open the **codelab_daily_tests** dashboard.
 
@@ -897,13 +923,18 @@ Enjoy.
 
 Review the query behind one of the chart widgets.
 
-*   Click the **Distinct tests run** widget, the first table.
-*   Review widget properties in the opened pane to the left.
-*   Click **Edit SQL** on the top menu to see the actual query of data
-    from your BigQuery table.
+Click the **Distinct tests run** widget, the first table.
+![distinct tests](images/distinct_tests.png "Distinct Tests")
 
-Look through the other example chart widgets to see how you
-might construct your dashboards.
+Review widget properties in the opened pane to the left.
+
+Click **Edit SQL** on the top menu to see the actual query of data
+    from your BigQuery table.
+![edit sql](images/edit_sql.png "Edit SQL")
+
+Look through the other example chart widgets, properties, and queries to see 
+how you might construct your dashboards.
+
 
 ## Cleanup
 

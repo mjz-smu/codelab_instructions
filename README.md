@@ -969,14 +969,6 @@ benchmarks.
 You learned how to build an end-to-end workflow for running benchmarks,
 gathering data, and visualizing performance trends.
 
-### Friction
-
-**For @google.com users ONLY**
-
-If you encounter friction running experiments with PKB, or visualizing
-data with PKE, make a note in our
-[friction log](https://docs.google.com/spreadsheets/d/1JudPW4rbZy8oczGb0IRVwrrVFwEBvz3nTXRNzg0QvHE/edit?usp=sharing).
-
 ### Next Steps
 
 *   Run more benchmark tests!

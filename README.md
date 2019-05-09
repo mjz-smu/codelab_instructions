@@ -911,11 +911,14 @@ Now you can browse through a working dashboard to get an idea how you might
 configure your dashboard using PKE.
 
 Choose **All dashboards** from the left dashboard list.
+
 ![all dashboards](images/all_dashboards.png "All Dashboards")
 
 Open the **codelab_daily_tests** dashboard.
 
 Enjoy.
+
+**Expected output**
 
 ![pke daily](images/pke_daily_dashboard.png "PKE Daily")
 

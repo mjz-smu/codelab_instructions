@@ -568,7 +568,7 @@ cd ~/PerfKitExplorer
 #### Step 3
 
 Initialize an empty **dataset** where result tables and views can
-be created, secured and shared. 
+be created, secured and shared.
 
 For this lab, use the BigQuery command-line tool `bq` in Cloud Shell.
 
@@ -927,12 +927,15 @@ Enjoy.
 Review the query behind one of the chart widgets.
 
 Click the **Distinct tests run** widget, the first table.
+Click in the white-space once to select the widget.
+
 ![distinct tests](images/distinct_tests.png "Distinct Tests")
 
 Review widget properties in the opened pane to the left.
 
 Click **Edit SQL** on the top menu to see the actual query of data
-    from your BigQuery table.
+from your BigQuery table.
+
 ![edit sql](images/edit_sql.png "Edit SQL")
 
 Look through the other example chart widgets, properties, and queries to see 
@@ -965,14 +968,6 @@ benchmarks.
 
 You learned how to build an end-to-end workflow for running benchmarks,
 gathering data, and visualizing performance trends.
-
-### Friction
-
-**For @google.com users ONLY**
-
-If you encounter friction running experiments with PKB, or visualizing
-data with PKE, make a note in our
-[friction log](https://docs.google.com/spreadsheets/d/1JudPW4rbZy8oczGb0IRVwrrVFwEBvz3nTXRNzg0QvHE/edit?usp=sharing).
 
 ### Next Steps
 

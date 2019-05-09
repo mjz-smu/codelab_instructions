@@ -4,12 +4,18 @@
 
 ### Performance benchmarking
 
+For most users, performance benchmarking is a series of steps in pursuit of an
+answer to a performance question.
 ![benchmarking process](images/benchmarking_process.png "Benchmarking Process")
 
 ### Performance benchmarking on public cloud
 
-Adds a layer of resource provisioning, including isolation, as defined by
-enclosing resources in a VPC network, and security, enforced by firewall rules.
+Conducting performance benchmarking in public cloud adds layers to the
+challenge. Experiments need to provision resources, manage security
+issues by introducing firewall rules, and eventually deprovision resources.
+
+PerfKit Benchmarker and PerfKit Explorer were created to aid benchmark
+selection, execution, and analysis using public cloud resources.
 
 ### Introducing PerfKit Benchmarker
 
@@ -21,13 +27,19 @@ installing and running the actual benchmark tests.
 
 #### PKB Architecture
 
+PKB divides benchmarking experiments into a multi-step process:
+
+1.  Configuration
+1.  Provisioning
+1.  Execution
+1.  Teardown
+1.  Publish
+
 ![pkb architecture](images/pkb_architecture.png "PKB Architecture")
 
-### Performance benchmarking on Google Cloud Platform with PKB
-
-Performance benchmarking, with PKB, on Google Cloud Platform (GCP).
-
 ## What you'll do
+
+In this lab, you will:
 
 *   Install PerfKit Benchmarker
 *   Explore PKB command-line flags
@@ -655,6 +667,11 @@ change control processes.
 
 PKE operates as an App Engine application in your project.
 
+**Note**: this procedure generates an **default** App Engine application,
+also called a **default** service. If you already have a **default**
+application, this procedure will replace it as a new version of the default
+service. Consider a new, empty project if this is a problem.
+
 ### Review a running demo instance of PKE
 
 You can look through the supported performance chart-types on the
@@ -676,7 +693,7 @@ sudo apt-get update
 ```
 
 ```
-sudo apt-get install python2.7 openjdk-8-jdk git nodejs nodejs-legacy npm
+sudo apt-get -y install python2.7 openjdk-8-jdk git nodejs nodejs-legacy npm
 ```
 
 #### Step 2
@@ -704,10 +721,6 @@ bower install
 ```
 
 ### Compile and deploy the dashboard as an App Engine application
-
-**Note**: this procedure generates an **default** App Engine application.
-If you already have a **default** application, this procedure will replace
-it as a new version. Consider a new, empty project if this is a problem.
 
 #### Step 1
 
@@ -812,35 +825,67 @@ Name the file:
 /home/[USERNAME]/PerfKitExplorer/data/codelab/codelab_perfkit_dashboard.json
 ```
 
-You can see what to pass for USERNAME with `echo $USER`.
+You can see what to pass for username with `echo $user`.
 
 ### Load the dashboard configuration file into the application
 
 #### Step 1
 
-Open the project URL https://[PROJECT-ID].appspot.com in your browser.
+Open the project url https://[project-id].appspot.com in your browser.
 
 #### Step 2
 
-Click **Edit Config** in the gear icon at the top right, and set the
-**default project** to your [PROJECT-ID].
+Click **Edit config** in the gear icon at the top right, and set the
+**default project** to your [project-id].
+
+Click **Update**.
 
 #### Step 3
 
-In **Perfkit Dashboard Administration**, click **Upload**, and select the
-sample dashboard file you downloaded: `codelab_perfkit_dashboard.json`.
+In **Perfkit Dashboard Administration**, click **Upload** > **Choose File**,
+and select the sample dashboard file you downloaded:
+`codelab_perfkit_dashboard.json`.
 
-Clear the username so it defaults to the current user.
+Clear the **Owner** field, so it defaults to the current user.
 
-#### Step 3
+Click **Upload**.
+
+#### Step 4
 
 Now you can browse through a working dashboard to get an idea how you might
 configure your dashboard using PKE.
 
+Choose **All dashboards** from the left dashboard list.
+
+Open the **codelab_daily_tests** dashboard.
+
+Enjoy.
+
+![pke daily](images/pke_daily_dashboard.png "PKE Daily")
+
+#### Step 5
+
+Review the query behind one of the chart widgets.
+
+*   Click the **Distinct tests run** widget, the first table.
+*   Review widget properties in the opened pane to the left.
+*   Click **Edit SQL** on the top menu to see the actual query of data
+    from your BigQuery table.
+
+Look through the other example chart widgets to see how you
+might construct your dashboards.
+
 ## Cleanup
 
-*   Deployment files in Cloud Storage
-*   AppEngine app
+You can clean up the files from 2 buckets used to deploy your application
+to AppEngine.
+
+From **GCP Console** > **Storage** > **Browser**, delete:
+`[PROJECT-ID].appspot.com` and `staging.[PROJECT-ID].appspot.com`.
+
+At this time, you cannot delete the **default** service in your App Engine
+application. If you have previous service versions, you can delete the version
+added by this lab through the GCP Console > App Engine > Versions pages.
 
 ## Congratulations!
 

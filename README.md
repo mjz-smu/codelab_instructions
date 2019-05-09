@@ -831,7 +831,7 @@ You can see what to pass for username with `echo $user`.
 
 #### Step 1
 
-Open the project url https://[project-id].appspot.com in your browser.
+Open the project url `https://[project-id].appspot.com` in your browser.
 
 #### Step 2
 
@@ -885,7 +885,8 @@ From **GCP Console** > **Storage** > **Browser**, delete:
 
 At this time, you cannot delete the **default** service in your App Engine
 application. If you have previous service versions, you can delete the version
-added by this lab through the GCP Console > App Engine > Versions pages.
+added by this lab through the 
+**GCP Console** > **App Engine** > **Versions** pages.
 
 ## Congratulations!
 

@@ -31,6 +31,9 @@ PKB divides benchmarking experiments into a multi-step process:
 
 ![pkb architecture](images/pkb_architecture.png "PKB Architecture")
 
+PKB is a strong starting effort at meeting most of the needs of any end-to-end
+performance benchmarking project.
+
 | PKB Arch Stage |    | Performance Benchmarking Process |
 |----------------|----|----------------------------------|
 | Configuring    | -> | 2. Choose benchmark              |
@@ -38,9 +41,6 @@ PKB divides benchmarking experiments into a multi-step process:
 | Execution      | -> | 3. Execute benchmark tests       |
 | Teardown       | -> | 3. Execute benchmark tests       |
 | Publish        | -> | 4. Analyze test data             |
-
-PKB is a strong starting effort at meeting most of the needs of any end-to-end
-performance benchmarking project.
 
 The Initial focus is on reducing the friction with PKB while answering
 performance-related questions for GCP customers.

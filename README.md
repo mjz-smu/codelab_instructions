@@ -29,13 +29,22 @@ installing and running the actual benchmark tests.
 
 PKB divides benchmarking experiments into a multi-step process:
 
-1.  Configuration
-1.  Provisioning
-1.  Execution
-1.  Teardown
-1.  Publish
-
 ![pkb architecture](images/pkb_architecture.png "PKB Architecture")
+
+| PKB Arch Stage |    | Performance Benchmarking Process |
+|----------------|----|----------------------------------|
+| Configuring    | -> | 2. Choose benchmark              |
+| Provisioning   | -> | 3. Execute benchmark tests       |
+| Execution      | -> | 3. Execute benchmark tests       |
+| Teardown       | -> | 3. Execute benchmark tests       |
+| Publish        | -> | 4. Analyze test data             |
+
+PKB is a strong starting effort at meeting most of the needs of any end-to-end
+performance benchmarking project.
+
+The Initial focus is on reducing the friction with PKB while answering
+performance-related questions for GCP customers.
+
 
 ## What you'll do
 
@@ -134,14 +143,16 @@ Updated property [core/project].
 
 **Note**: in this lab, you use the
 [SMU AT&T Center for Virtualization](https://www.smu.edu/Provost/virtualization)
-fork of the base
-[PKB repo](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker). This
-[fork](https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker.git)
-has a few extra features which will be merged back to the main repo soon.
+forks of the base
+[PKB repos](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker). These
+[forks](https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker.git)
+have a few extra features which will be merged back to the main repos soon.
 
 #### Step 1
 
-In Cloud Shell, `clone` the PerfKitBenchmarker repository.
+In Cloud Shell, clone the PerfKitBenchmarker repository, and the PerfKitExplorer
+repository side-by-side.
+
 
 ```
 cd ~
@@ -149,6 +160,10 @@ cd ~
 
 ```
 git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker.git
+```
+
+```
+git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitExplorer.git
 ```
 
 #### Step 2
@@ -551,15 +566,7 @@ Session** button on top of the existing Cloud Shell.
 
 #### Step 2
 
-Clone the PKE git repository.
-
-```
-cd ~
-```
-
-```
-git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitExplorer.git
-```
+Ensure you're working from the PerfKitExplorer directory.
 
 ```
 cd ~/PerfKitExplorer

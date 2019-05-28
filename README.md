@@ -10,12 +10,19 @@ answer to a performance question.
 
 ### Performance benchmarking on public cloud
 
-Conducting performance benchmarking in public cloud adds layers to the
-challenge. Experiments need to provision resources, manage security
-issues by introducing firewall rules, and eventually deprovision resources.
+Challenges often arise in selecting appropriate benchmarks, configuring
+nontrivial environments, and sifting through results for actionable
+intelligence and reporting.
 
-PerfKit Benchmarker and PerfKit Explorer were created to aid benchmark
-selection, execution, and analysis using public cloud resources.
+Conducting performance benchmarking in public cloud adds layers to the challenge.
+Experiments need to provision resources in cloud, navigate security protections
+by adjusting firewall rules, and eventually deprovision resources for cost
+economies.
+
+[PerfKit Benchmarker](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker)
+and [PerfKit Explorer](https://github.com/GoogleCloudPlatform/PerfKitExplorer)
+were created to aid benchmark selection, execution, and analysis using public
+cloud resources.
 
 ### Introducing PerfKit Benchmarker
 
@@ -105,8 +112,9 @@ gcloud auth list
 **Expected output**
 
 ```
-Credentialed accounts:
- - <myaccount>@<mydomain>.com (active)
+ Credentialed accounts:
+ACTIVE  ACCOUNT
+*       <myaccount>@<mydomain>.com
 ```
 
 **Note:** `gcloud` is the powerful and unified command-line tool for
@@ -190,10 +198,11 @@ instructions for running other benchmarks can be located by reviewing the
 
 ## Running PKB using command-line flags
 
-You can run benchmarks right now. If you execute `./pkb.py`, with no
-command-line flags, PKB will attempt to run a standard set of benchmarks
-on default machine types in the default region. You can read more about the
-**standard_set** later in this lab.
+You can run benchmarks right now. Don't do this just yet, but if you execute
+`./pkb.py` with no command-line flags, PKB will attempt to run a **standard**
+set of benchmarks on **default** machine types in the **default** region.
+Running this set takes hours.  You can read more about the **standard_set**
+later in this lab.
 
 Instead, it is more common to choose specific benchmarks and options
 using **command-line flags**.
@@ -205,18 +214,21 @@ and `--machine_type` flags work.
 
 *   `--cloud`: As **GCP** is the default cloud provider for PKB, the
     `--cloud` flag has a default value of **GCP**.
-*   `--project`: PKB needs to have a GCP **PROJECT-ID** to run. By using Cloud
-    Shell in this lab, PKB can infer the `--project` **PROJECT-ID** from
-    the environment.
+*   `--project`: PKB needs to have a GCP **PROJECT-ID** to manage resources
+    and run benchmarks. When using Cloud Shell in this lab, PKB infers the
+    `--project` **PROJECT-ID** from the environment.
 *   `--zone`: Every cloud provider has a default zone. For GCP, the
-    `--zone` flag defaults to
-    [**us-central1-a**](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker/blob/master/perfkitbenchmarker/configs/default_config_constants.yaml).
+    `--zone` flag
+    [defaults](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker/blob/master/perfkitbenchmarker/configs/default_config_constants.yaml)
+    to `us-central1-a`.
 *   `--machine_type`: Benchmarks are frequently tightly coupled to
     specific machine capabilities, especially CPU and memory. You can pick
     your specific machines with the `--machine_type` flag. Most benchmark
     tests, including the common networking benchmarks **ping**, **iperf**,
     and **netperf**, default to the provider-specific
-    `default_single_core` machine. On GCP, the default machine is the [**n1-standard-1**](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker/blob/master/perfkitbenchmarker/configs/default_config_constants.yaml.)
+    `default_single_core` machine. On GCP, the
+    [default machine](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker/blob/master/perfkitbenchmarker/configs/default_config_constants.yaml)
+    is the `n1-standard-1`.
 
 You can learn more about alternative flag values in the
 [Useful Global Flags](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker#useful-global-flags)
@@ -229,7 +241,7 @@ The `--benchmarks` flag is used to select the benchmark(s) run. Not supplying
 The **standard_set** is a collection of commonly used benchmarks. You can read
 more about benchmark sets later in this lab.
 
-Cloud benchmark tests commonly need at least 10minutes to complete because of
+Cloud benchmark tests commonly need at least 10 minutes to complete because of
 the many resources, including networks, firewall rules, and VMs, that must
 be both provisioned and de-provisioned.
 
@@ -263,6 +275,7 @@ Name   UID     Status     Failed Substatus
 iperf  iperf0  SUCCEEDED
 ------------------------------------------
 Success rate: 100.00% (1/1)
+...
 ```
 
 ## Discovering helfpul flags and notes about benchmark tests
@@ -273,6 +286,7 @@ While **iperf** is running, explore PKB benchmarks and flags.
 
 Open a second Cloud Shell in GCP Console by clicking the **Add Cloud Shell
 Session** button on top of the existing Cloud Shell.
+![add cloudshell](images/add_cloudshell.png "Add Cloud Shell")
 
 #### Step 2
 
@@ -426,13 +440,17 @@ benchmarks by looking through the `--helpmatchmd` output.
 ### Measure latency with ping
 
 Run a test to determine the latency between two machines in a single
-zone. Supply the machine_type and/or zone.
+zone.
 
-**Expected duration**: ~11-12min. each
+**Expected duration**: ~11-12min.
+
+Select the machine_type:
 
 ```
 ./pkb.py --benchmarks=ping --machine_type=f1-micro
 ```
+
+Or, select the zone:
 
 ```
 ./pkb.py --benchmarks=ping --zones=us-east1-b
@@ -454,6 +472,62 @@ kernel/system configuration changes.
 
 ```
 ./pkb.py --benchmarks=netperf
+```
+
+**Expected output**:
+
+```
+-------------------------PerfKitBenchmarker Results Summary-------------------------
+NETPERF:
+...
+ TCP_RR_Latency_p50                   86.000000 us                             (ip_type="internal" netperf_retransmissions="0" netserver_retransmissions="0")
+  TCP_RR_Latency_p90                  177.000000 us                             (ip_type="internal" netperf_retransmissions="0" netserver_retransmissions="0")
+  TCP_RR_Latency_p99                  273.000000 us                             (ip_type="internal" netperf_retransmissions="0" netserver_retransmissions="0")
+  TCP_RR_Latency_min                   58.000000 us                             (ip_type="internal" netperf_retransmissions="0" netserver_retransmissions="0")
+  TCP_RR_Latency_max                49808.000000 us                             (ip_type="internal" netperf_retransmissions="0" netserver_retransmissions="0")
+  TCP_RR_Latency_stddev               142.160000 us                             (ip_type="internal" netperf_retransmissions="0" netserver_retransmissions="0")
+...
+  TCP_CRR_Latency_p50                2241.000000 us                             (ip_type="external" netperf_retransmissions="0" netserver_retransmissions="-1")
+  TCP_CRR_Latency_p90                2469.000000 us                             (ip_type="external" netperf_retransmissions="0" netserver_retransmissions="-1")
+  TCP_CRR_Latency_p99                2904.000000 us                             (ip_type="external" netperf_retransmissions="0" netserver_retransmissions="-1")
+  TCP_CRR_Latency_min                1443.000000 us                             (ip_type="external" netperf_retransmissions="0" netserver_retransmissions="-1")
+  TCP_CRR_Latency_max               54596.000000 us                             (ip_type="external" netperf_retransmissions="0" netserver_retransmissions="-1")
+  TCP_CRR_Latency_stddev              750.250000 us                             (ip_type="external" netperf_retransmissions="0" netserver_retransmissions="-1")
+  TCP_CRR_Transaction_Rate           3781.560000 transactions_per_second        (ip_type="internal" netperf_retransmissions="-1" netserver_retransmissions="-1")
+...
+  TCP_CRR_Latency_p50                 243.000000 us                             (ip_type="internal" netperf_retransmissions="-1" netserver_retransmissions="-1")
+  TCP_CRR_Latency_p90                 373.000000 us                             (ip_type="internal" netperf_retransmissions="-1" netserver_retransmissions="-1")
+  TCP_CRR_Latency_p99                 529.000000 us                             (ip_type="internal" netperf_retransmissions="-1" netserver_retransmissions="-1")
+  TCP_CRR_Latency_min                 135.000000 us                             (ip_type="internal" netperf_retransmissions="-1" netserver_retransmissions="-1")
+  TCP_CRR_Latency_max               51909.000000 us                             (ip_type="internal" netperf_retransmissions="-1" netserver_retransmissions="-1")
+  TCP_CRR_Latency_stddev              220.470000 us                             (ip_type="internal" netperf_retransmissions="-1" netserver_retransmissions="-1")
+  TCP_STREAM_Throughput              1956.770000 Mbits/sec                      (ip_type="external" netperf_retransmissions="6013" netserver_retransmissions="0")
+  TCP_STREAM_Throughput              1965.250000 Mbits/sec                      (ip_type="internal" netperf_retransmissions="3384" netserver_retransmissions="0")
+  UDP_RR_Transaction_Rate             955.900000 transactions_per_second        (ip_type="external")
+...
+  UDP_RR_Latency_p50                 1039.000000 us                             (ip_type="external")
+  UDP_RR_Latency_p90                 1099.000000 us                             (ip_type="external")
+  UDP_RR_Latency_p99                 1271.000000 us                             (ip_type="external")
+  UDP_RR_Latency_min                  916.000000 us                             (ip_type="external")
+  UDP_RR_Latency_max                45137.000000 us                             (ip_type="external")
+  UDP_RR_Latency_stddev               399.500000 us                             (ip_type="external")
+  UDP_RR_Transaction_Rate            7611.790000 transactions_per_second        (ip_type="internal")
+...
+  UDP_RR_Latency_p50                  112.000000 us                             (ip_type="internal")
+  UDP_RR_Latency_p90                  195.000000 us                             (ip_type="internal")
+  UDP_RR_Latency_p99                  286.000000 us                             (ip_type="internal")
+  UDP_RR_Latency_min                   71.000000 us                             (ip_type="internal")
+  UDP_RR_Latency_max                50566.000000 us                             (ip_type="internal")
+  UDP_RR_Latency_stddev               163.220000 us                             (ip_type="internal")
+  End to End Runtime                 1095.321094 seconds
+...
+----------------------------------------------
+Name     UID       Status     Failed Substatus
+----------------------------------------------
+netperf  netperf0  SUCCEEDED
+----------------------------------------------
+Success rate: 100.00% (1/1)
+...
 ```
 
 ## Creating Config Files for More Complex Tests
@@ -491,7 +565,7 @@ flags:
 
 When you have time later, run this benchmark using the config file.
 
-**Expected duration**: 13-14min.
+**Expected duration**: 10-11min.
 
 ```
 ./pkb.py --benchmark_config_file=sample_config.yml --benchmarks=iperf
@@ -505,12 +579,18 @@ still supply the `--benchmarks` flag.
 ```
 -------------------------PerfKitBenchmarker Results Summary-------------------------
 IPERF:
+  receiving_machine_type="n1-standard-1" run_number="0" runtime_in_seconds="30" sending_machine_type="n1-standard-1" sending_thread_count="5"
+  Throughput                         1833.000000 Mbits/sec                      (ip_type="external" receiving_zone="us-east1-b" sending_zone="us-central1-b")
+  Throughput                         1952.000000 Mbits/sec                      (ip_type="internal" receiving_zone="us-east1-b" sending_zone="us-central1-b")
+  Throughput                         1951.000000 Mbits/sec                      (ip_type="external" receiving_zone="us-central1-b" sending_zone="us-east1-b")
+  Throughput                         1945.000000 Mbits/sec                      (ip_type="internal" receiving_zone="us-central1-b" sending_zone="us-east1-b")
+  End to End Runtime                  624.456890 seconds
 ...
-----------------------------------------
-Name  UID    Status     Failed Substatus
-----------------------------------------
+------------------------------------------
+Name   UID     Status     Failed Substatus
+------------------------------------------
 iperf  iperf0  SUCCEEDED
-----------------------------------------
+------------------------------------------
 Success rate: 100.00% (1/1)
 ...
 ```
@@ -600,7 +680,8 @@ Dataset '[PROJECT-ID]:samples_mart' successfully created.
 Load the `samples_mart` dataset from a file.
 
 ```
-bq load --project_id=[PROJECT-ID] \
+export PROJECT=$(gcloud info --format='value(config.project)')
+bq load --project_id=$PROJECT \
     --source_format=NEWLINE_DELIMITED_JSON \
     samples_mart.results \
     ./data/samples_mart/sample_results.json \
@@ -625,7 +706,7 @@ bq query 'SELECT * FROM samples_mart.results LIMIT 200'
 You can also see your data using the
 [BigQuery UI](https://console.cloud.google.com/bigquery).
 
-Use the **Query View** to run a simple query that shows your results.
+Use the **Query editor** to run a simple query that shows your results.
 
 ```
 SELECT * FROM samples_mart.results LIMIT 200;
@@ -668,9 +749,32 @@ result data directly to BigQuery tables.
 **Expected duration**: 13-14min.
 
 ```
+cd ~/PerfKitBenchmarker
+export PROJECT=$(gcloud info --format='value(config.project)')
 ./pkb.py --benchmarks=iperf \
-    --bq_project=[PROJECT-ID] \
+    --bq_project=$PROJECT \
     --bigquery_table=example_dataset.network_tests
+```
+
+**Expected output**:
+
+```
+-------------------------PerfKitBenchmarker Results Summary-------------------------
+IPERF:
+  receiving_machine_type="n1-standard-1" receiving_zone="us-central1-a" run_number="0" runtime_in_seconds="60" sending_machine_type="n1-standard-1" sending_thread_count="1" sending_zone="us-central1-a"
+  Throughput                         1881.000000 Mbits/sec                      (ip_type="external")
+  Throughput                         1970.000000 Mbits/sec                      (ip_type="internal")
+  Throughput                         1970.000000 Mbits/sec                      (ip_type="external")
+  Throughput                         1967.000000 Mbits/sec                      (ip_type="internal")
+  End to End Runtime                  777.230134 seconds
+...
+------------------------------------------
+Name   UID     Status     Failed Substatus
+------------------------------------------
+iperf  iperf0  SUCCEEDED
+------------------------------------------
+Success rate: 100.00% (1/1)
+...
 ```
 
 You can now query `example_dataset` for result data. You will learn to visualize
@@ -845,7 +949,8 @@ is used to autodetect the table schema. The table does not need to exist before
 running the command.
 
 ```
-bq load --project_id=[PROJECT-ID] \
+export PROJECT=$(gcloud info --format='value(config.project)')
+bq load --project_id=$PROJECT \
     --autodetect \
     --source_format=NEWLINE_DELIMITED_JSON \
     example_dataset.results \

@@ -781,7 +781,7 @@ You can now query `example_dataset` for result data. You will learn to visualize
 this data, in the next section.
 
 
-## Visualizing Data with PerfKit Explorer
+## Visualizing Data with Datastudio
 
 To really impact your business, though, you want to identify insights from your
 performance projects. You need to look through many passes of multiple tests
@@ -791,21 +791,16 @@ over time, or differences from one geography to another.
 Visualization tools help you to summarize large sets of result data into
 understandable charts, and tables.
 
-**PerfKit Explorer (PKE)** is an open-source companion tool for PerfKit
-Benchmarker. PKE is a service and web frontend for composing queries and
-dashboards.
+**Datastudio** is a Google tool for data visualization. It can dynamically pull
+and display data from BiqQuery as well as many other data sources.
 
-With PKE, you can preload dashboards, queries, and views of your data
-to help you identify critical insights in your performance data. PKE allows
-you to describe dashboards and queries in files that can be part of your
-change control processes.
+With Datastudio, you can copy an existing sample dashboard, and edit it to fit our 
+needs or create one from scratch. You can attach it to your datasource (the 
+BiqQuery tables where your PKB results are stored) and use it to view your data and 
+help identify critical insights into your performance data. Datastudio maintains a 
+complete version history in much the same way that Google Docs does.
 
-PKE operates as an App Engine application in your project.
-
-**Note**: this procedure generates an **default** App Engine application,
-also called a **default** service. If you already have a **default**
-application, this procedure will replace it as a new version of the default
-service. Consider a new, empty project if this is a problem.
+#TODO Add an example dashboard to look at and copy
 
 ### Review a running demo instance of PKE
 
@@ -814,107 +809,10 @@ You can look through the supported performance chart-types on the
 
 ![pke demo dashboard](images/pke_demo_dashboard.png "PKE Demo Dashboard")
 
-### Install PKE and related packages
-
-Build the PKE application, in Cloud Shell, from the `PerfKitExplorer`
-directory.
-
-#### Step 1
-
-Ensure you run from the `PerfKitExplorer` directory
-
-```
-cd ~/PerfKitExplorer
-```
-
-#### Step 2
-
-In Cloud Shell, install the prerequisite packages:
-
-```
-sudo apt-get update
-```
-
-```
-sudo apt-get -y install python2.7 openjdk-8-jdk git nodejs nodejs-legacy npm
-```
-
-#### Step 3
-
-Use git to download required submodules including closure-library.
-
-```
-git submodule update --init
-```
-
-#### Step 4
-
-Install required packages
-
-```
-npm install
-```
-
-```
-sudo npm install -g bower
-```
-
-```
-bower install
-```
-
-During the bower installation process, you may be asked to select a suitable
-version of angular. We want to select one of the options that resolves
-to angular version 1.5.8. In the example below, we chose option 2.
-
-![bower installation](images/bower_install.png "Benchmarking Process")
-
-### Compile and deploy the dashboard as an App Engine application
-
-#### Step 1
-
-Compile the application.
-
-```
-bash compile.sh
-```
-
-#### Step 2
-
-Deploy the application to App Engine from the newly created `deploy` directory.
-
-```
-cd deploy
-```
-
-```
-gcloud app deploy
-```
-
-**Expected output**
-
-```
-target url:      [https://[PROJECT-ID].appspot.com]
-
-
-Do you want to continue (Y/n)?  y
-
-Beginning deployment of service [default]...
-File upload done.
-Updating service [default]...done.
-Setting traffic split for service [default]...done.
-Deployed service [default] to [https://[PROJECT-ID].appspot.com]
-```
-
-Choose the nearest region to deploy the application.
-
-The app will deploy to https://[PROJECT-ID].appspot.com
-
-You now have a live PKE application running, listening on port 80.
 
 ### Load a larger set of sample data to visualize
 
-To demonstrate the capabilities of PKE, load a larger collection of demo data
+To demonstrate the capabilities of Datastudio, load a larger collection of demo data
 and a dashboard configuration.
 
 #### Step 1
@@ -964,10 +862,12 @@ Upload complete.
 Waiting on bqjob_xxxx ... (1s) Current status: DONE
 ```
 
-### Prepare a dashboard configuration file
+### Prepare a Datastudio Report
 
-The sample dashboard configuration is stored in a json file. Edit and download
-it to your local machine.
+#TODO
+#steps copy datastudio dashboard
+#make bigquery views
+#change datasource in datastudio
 
 #### Step 1
 
@@ -980,42 +880,6 @@ sed -i 's/my_project.my_dataset.my_table/[PROJECT-ID].example_dataset.results/g'
 
 #### Step 2
 
-Download the file from the Cloud Shell to your local machine.
-
-From Cloud Shell click the
-![cloudshell tools menu](images/cloudshell_tools_menu.png "CloudShell Tools")
-then **Download file**.
-
-Name the file:
-
-```
-/home/[USERNAME]/PerfKitExplorer/data/codelab/codelab_perfkit_dashboard.json
-```
-
-You can see what to pass for username with `echo $user`.
-
-### Load the dashboard configuration file into the application
-
-#### Step 1
-
-Open the project url `https://[project-id].appspot.com` in your browser.
-
-#### Step 2
-
-Click **Edit config** in the gear icon at the top right, and set the
-**default project** to your [project-id].
-
-Click **Update**.
-
-#### Step 3
-
-In **Perfkit Dashboard Administration**, click **Upload** > **Choose File**,
-and select the sample dashboard file you downloaded:
-`codelab_perfkit_dashboard.json`.
-
-Clear the **Owner** field, so it defaults to the current user.
-
-Click **Upload**.
 
 #### Step 4
 
@@ -1093,4 +957,5 @@ gathering data, and visualizing performance trends.
     from Google Cloud Next '19.
 *   Follow the
     [PKB repo](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker). Look
-    for upcoming improvements in running container benchmarks.
+    for our new improvements in running container benchmarks and our upcoming 
+    improvements in running VPN benchmarks.

@@ -861,36 +861,33 @@ bq mk \
 --use_legacy_sql=false \
 --description "This is my view" \
 --view \
-"SELECT
+'SELECT
       value,
       unit,
         metric,
   test,
       TIMESTAMP_MICROS(CAST(timestamp * 1000000 AS int64)) AS thedate,
-      REGEXP_EXTRACT(labels, r'\|vm_1_cloud:(.*?)\|') AS vm_1_cloud,
-      REGEXP_EXTRACT(labels, r'\|vm_2_cloud:(.*?)\|') AS vm_2_cloud,
-      REGEXP_EXTRACT(labels, r'\|sending_zone:(.*?)\|') AS sending_zone,
-      REGEXP_EXTRACT(labels, r'\|receiving_zone:(.*?)\|') AS receiving_zone,
-      REGEXP_EXTRACT(labels, r'\|sending_zone:(.*?-.*?)-.*?\|') AS sending_region,
-      REGEXP_EXTRACT(labels, r'\|receiving_zone:(.*?-.*?)-.*?\|') AS receiving_region,
-      REGEXP_EXTRACT(labels, r'\|vm_1_machine_type:(.*?)\|') AS machine_type,
-      REGEXP_EXTRACT(labels, r'\|ip_type:(.*?)\|') AS ip_type 
+      REGEXP_EXTRACT(labels, r"\|vm_1_cloud:(.*?)\|") AS vm_1_cloud,
+      REGEXP_EXTRACT(labels, r"\|vm_2_cloud:(.*?)\|") AS vm_2_cloud,
+      REGEXP_EXTRACT(labels, r"\|sending_zone:(.*?)\|") AS sending_zone,
+      REGEXP_EXTRACT(labels, r"\|receiving_zone:(.*?)\|") AS receiving_zone,
+      REGEXP_EXTRACT(labels, r"\|sending_zone:(.*?-.*?)-.*?\|") AS sending_region,
+      REGEXP_EXTRACT(labels, r"\|receiving_zone:(.*?-.*?)-.*?\|") AS receiving_region,
+      REGEXP_EXTRACT(labels, r"\|vm_1_machine_type:(.*?)\|") AS machine_type,
+      REGEXP_EXTRACT(labels, r"\|ip_type:(.*?)\|") AS ip_type 
     FROM 
-    `smu-benchmarking.codelab_import_test.pkb_results`" \
-example_dataset.results_view
+    `[project_id].example_dataset.results`' \
+--project_id [project_id] example_dataset.results_view
 ```
 
 **Expected output**
-
-#TODO
-
+```
+View '[project_id]:example_dataset.results_view' successfully created.
+```
 
 
 ### Prepare a Datastudio Report
 
-#TODO
-#steps copy datastudio dashboard
-#change datasource in datastudio
 
 #### Step 1
 

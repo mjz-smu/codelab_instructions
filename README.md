@@ -791,12 +791,12 @@ complete version history in much the same way that Google Docs does.
 
 #TODO Add an example dashboard to look at and copy
 
-### Review a running demo instance of PKE
+### Review a running demo instance of Datastudio
 
 You can look through the supported performance chart-types on the
 [live deployment demo dashboard](https://perfkit-explorer.appspot.com/explore?dashboard=5714163003293696).
 
-![pke demo dashboard](images/pke_demo_dashboard.png "PKE Demo Dashboard")
+#TODO add report image
 
 
 ### Load a larger set of sample data to visualize
@@ -890,7 +890,6 @@ example_dataset.results_view
 
 #TODO
 #steps copy datastudio dashboard
-#make bigquery views
 #change datasource in datastudio
 
 #### Step 1
@@ -899,13 +898,15 @@ Look at the
 [datastudio.google.com/reporting/97043c2d-12ed-4d47-8b7b-4305f4b4aaed](Example Datastudio Report).
 
 On the upper right side of the screen, click the `Make a Copy of This Report` button.
-#TODO insert picture
+
+![Make a Copy of This Report](images/datastudio_copy_button.png "Datastudio Copy Button")
 
 #### Step 2
 
 It will then ask you select a new Datasource. We want to select the BigQuery View that we previously created.
 
-#TODO insert picture
+#TODO update picture to correct datasource
+![Datastudio add datasource](images/datastudio_add_datasource.png "Datastudio Add Datasource")
 
 
 #### Step 4

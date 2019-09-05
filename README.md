@@ -20,8 +20,7 @@ by adjusting firewall rules, and eventually deprovision resources for cost
 economies.
 
 [PerfKit Benchmarker](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker)
-and [PerfKit Explorer](https://github.com/GoogleCloudPlatform/PerfKitExplorer)
-were created to aid benchmark selection, execution, and analysis using public
+was created to aid benchmark selection, execution, and analysis using public
 cloud resources.
 
 ### Introducing PerfKit Benchmarker
@@ -158,7 +157,7 @@ have a few extra features which will be merged back to the main repos soon.
 
 #### Step 1
 
-In Cloud Shell, clone the PerfKitBenchmarker repository, and the PerfKitExplorer
+In Cloud Shell, clone the PerfKitBenchmarker repository, and the codelab
 repository side-by-side.
 
 
@@ -171,7 +170,7 @@ git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarke
 ```
 
 ```
-git clone https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitExplorer.git
+git clone https://github.com/SMU-ATT-Center-for-Virtualization/codelab_instructions.git
 ```
 
 #### Step 2
@@ -331,20 +330,10 @@ PKB has a naming convention for benchmarks of
 #### Step 5
 
 When you want to review the details and flags of a benchmark in depth, it can be
-easier to read formatted MarkDown.
+easier to read formatted MarkDown. The `--helpmatchmd` flag emits more easily 
+readable MarkDown text than `--helpmatch`.
 
-One advantage of our **fork** of PKB is a new `--helpmatchmd` flag. The
-`--helpmatchmd` flag emits more easily readable MarkDown text than
-`--helpmatch`.
-
-The MarkDown from using `--helpmatchmd` has also been checked back into our
-fork in the [testsuite_docs folder](https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker/tree/master/testsuite_docs).
-
-Review the available Linux benchmarks from the
-[linux_benchmarks file](https://github.com/SMU-ATT-Center-for-Virtualization/PerfKitBenchmarker/blob/master/testsuite_docs/linux_benchmarks.md).
-
-Try searching on **ping_benchmark**, **iperf_benchmark**, and
-**netperf_benchmark**.
+Review the available Linux benchmarks using `-helpmatchmd=linux_benchmarks`.
 
 #### Step 6
 
@@ -646,10 +635,10 @@ Session** button on top of the existing Cloud Shell.
 
 #### Step 2
 
-Ensure you're working from the PerfKitExplorer directory.
+Ensure you're working from the codelab_instructions directory.
 
 ```
-cd ~/PerfKitExplorer
+cd ~/codelab_instructions
 ```
 
 #### Step 3
@@ -871,12 +860,7 @@ Waiting on bqjob_xxxx ... (1s) Current status: DONE
 
 #### Step 1
 
-First, replace all references to the BigQuery dataset and tables.
-
-```
-sed -i 's/my_project.my_dataset.my_table/[PROJECT-ID].example_dataset.results/g' \
-    ./data/codelab/codelab_perfkit_dashboard.json
-```
+[datastudio.google.com/reporting/97043c2d-12ed-4d47-8b7b-4305f4b4aaed](Example Datastudio Report)
 
 #### Step 2
 

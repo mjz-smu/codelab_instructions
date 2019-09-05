@@ -902,8 +902,15 @@ On the upper right side of the screen, click the `Make a Copy of This Report` bu
 
 It will then ask you select a new Datasource. We want to select the BigQuery View that we previously created.
 
-#TODO update picture to correct datasource
-![Datastudio add datasource](images/datastudio_add_datasource.png "Datastudio Add Datasource")
+![Select Datasource](images/select_datasource.png "Datastudio Select Datasource")
+
+Now we want to click `Add to Report`
+
+![Add to report](images/add_to_report.png "Datastudio Add Datasource")
+
+Then we can now make a copy of the report
+
+![Datastudio add datasource](images/copy_this_report.png "Datastudio Add Datasource")
 
 
 #### Step 4

@@ -917,7 +917,7 @@ Enjoy.
 
 **Expected output**
 
-#TODO insert image
+![Datastudio exzmple report](images/datastudio_example.png "Datastudio example report")
 
 #### Step 5
 

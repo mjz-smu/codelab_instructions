@@ -823,10 +823,10 @@ Dataset '[PROJECT-ID]:example_dataset' successfully created.
 
 #### Step 2
 
-Ensure you run from the `PerfKitExplorer` directory
+Ensure you run from the `codelab_instructions` directory
 
 ```
-cd ~/PerfKitExplorer
+cd ~/codelab_instructions
 ```
 
 #### Step 3
@@ -841,7 +841,7 @@ bq load --project_id=$PROJECT \
     --autodetect \
     --source_format=NEWLINE_DELIMITED_JSON \
     example_dataset.results \
-    ./data/codelab/bq_pkb_sample.json
+    ./data/bq_pkb_sample.json
 ```
 
 **Expected output**
@@ -850,6 +850,41 @@ bq load --project_id=$PROJECT \
 Upload complete.
 Waiting on bqjob_xxxx ... (1s) Current status: DONE
 ```
+
+#### Step 4
+
+Now that we have loaded our dataset to BigQuery, it would be helpful to apply 
+some simple data transformations to make working with and visualizing the 
+data easier. To do this, we will create a new view.
+```
+bq mk \
+--use_legacy_sql=false \
+--description "This is my view" \
+--view \
+"SELECT
+      value,
+      unit,
+        metric,
+  test,
+      TIMESTAMP_MICROS(CAST(timestamp * 1000000 AS int64)) AS thedate,
+      REGEXP_EXTRACT(labels, r'\|vm_1_cloud:(.*?)\|') AS vm_1_cloud,
+      REGEXP_EXTRACT(labels, r'\|vm_2_cloud:(.*?)\|') AS vm_2_cloud,
+      REGEXP_EXTRACT(labels, r'\|sending_zone:(.*?)\|') AS sending_zone,
+      REGEXP_EXTRACT(labels, r'\|receiving_zone:(.*?)\|') AS receiving_zone,
+      REGEXP_EXTRACT(labels, r'\|sending_zone:(.*?-.*?)-.*?\|') AS sending_region,
+      REGEXP_EXTRACT(labels, r'\|receiving_zone:(.*?-.*?)-.*?\|') AS receiving_region,
+      REGEXP_EXTRACT(labels, r'\|vm_1_machine_type:(.*?)\|') AS machine_type,
+      REGEXP_EXTRACT(labels, r'\|ip_type:(.*?)\|') AS ip_type 
+    FROM 
+    `smu-benchmarking.codelab_import_test.pkb_results`" \
+example_dataset.results_view
+```
+
+**Expected output**
+
+#TODO
+
+
 
 ### Prepare a Datastudio Report
 
@@ -860,27 +895,28 @@ Waiting on bqjob_xxxx ... (1s) Current status: DONE
 
 #### Step 1
 
-[datastudio.google.com/reporting/97043c2d-12ed-4d47-8b7b-4305f4b4aaed](Example Datastudio Report)
+Look at the 
+[datastudio.google.com/reporting/97043c2d-12ed-4d47-8b7b-4305f4b4aaed](Example Datastudio Report).
+
+On the upper right side of the screen, click the `Make a Copy of This Report` button.
+#TODO insert picture
 
 #### Step 2
+
+It will then ask you select a new Datasource. We want to select the BigQuery View that we previously created.
+
+#TODO insert picture
 
 
 #### Step 4
 
-Now you can browse through a working dashboard to get an idea how you might
-configure your dashboard using PKE.
-
-Choose **All dashboards** from the left dashboard list.
-
-![all dashboards](images/all_dashboards.png "All Dashboards")
-
-Open the **codelab_daily_tests** dashboard.
+Now, you can create new charts and change your dashboard using you newly imported datasource
 
 Enjoy.
 
 **Expected output**
 
-![pke daily](images/pke_daily_dashboard.png "PKE Daily")
+#TODO insert image
 
 #### Step 5
 

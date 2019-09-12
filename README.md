@@ -924,19 +924,6 @@ Enjoy.
 ![Datastudio example report](images/datastudio_example.png "Datastudio example report")
 
 
-## Cleanup
-
-You can clean up the files from 2 buckets used to deploy your application
-to AppEngine.
-
-From **GCP Console** > **Storage** > **Browser**, delete:
-`[PROJECT-ID].appspot.com` and `staging.[PROJECT-ID].appspot.com`.
-
-At this time, you cannot delete the **default** service in your App Engine
-application. If you have previous service versions, you can delete the version
-added by this lab through the 
-**GCP Console** > **App Engine** > **Versions** pages.
-
 ## Congratulations!
 
 You have completed the PerfKitBenchmarker code lab!

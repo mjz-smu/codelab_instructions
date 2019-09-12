@@ -789,14 +789,11 @@ BiqQuery tables where your PKB results are stored) and use it to view your data 
 help identify critical insights into your performance data. Datastudio maintains a 
 complete version history in much the same way that Google Docs does.
 
-#TODO Add an example dashboard to look at and copy
-
 ### Review a running demo instance of Datastudio
 
-You can look through the supported performance chart-types on the
-[live deployment demo dashboard](https://perfkit-explorer.appspot.com/explore?dashboard=5714163003293696).
-
-#TODO add report image
+First, look at an [Example Datastudio Report](datastudio.google.com/reporting/97043c2d-12ed-4d47-8b7b-4305f4b4aaed).
+This is the report that we will be cloning and adding our own data too. Before we do
+that, first we need a set of data to look at.
 
 
 ### Load a larger set of sample data to visualize
@@ -892,7 +889,7 @@ View '[project_id]:example_dataset.results_view' successfully created.
 #### Step 1
 
 Look at the 
-[datastudio.google.com/reporting/97043c2d-12ed-4d47-8b7b-4305f4b4aaed](Example Datastudio Report).
+[Example Datastudio Report](datastudio.google.com/reporting/97043c2d-12ed-4d47-8b7b-4305f4b4aaed).
 
 On the upper right side of the screen, click the `Make a Copy of This Report` button.
 
@@ -913,34 +910,18 @@ Then we can now make a copy of the report
 ![Datastudio add datasource](images/copy_this_report.png "Datastudio Add Datasource")
 
 
-#### Step 4
+#### Step 3
 
-Now, you can create new charts and change your dashboard using you newly imported datasource
+Now, you can create new charts and change your dashboard using you newly imported datasource. Data studio 
+provides a variety of different chart types and options so that you should be able to visualize 
+many different types of metrics regarding these benchmarks.
+
 
 Enjoy.
 
 **Expected output**
 
-![Datastudio exzmple report](images/datastudio_example.png "Datastudio example report")
-
-#### Step 5
-
-Review the query behind one of the chart widgets.
-
-Click the **Distinct tests run** widget, the first table.
-Click in the white-space once to select the widget.
-
-![distinct tests](images/distinct_tests.png "Distinct Tests")
-
-Review widget properties in the opened pane to the left.
-
-Click **Edit SQL** on the top menu to see the actual query of data
-from your BigQuery table.
-
-![edit sql](images/edit_sql.png "Edit SQL")
-
-Look through the other example chart widgets, properties, and queries to see 
-how you might construct your dashboards.
+![Datastudio example report](images/datastudio_example.png "Datastudio example report")
 
 
 ## Cleanup

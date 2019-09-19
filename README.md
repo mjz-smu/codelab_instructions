@@ -356,7 +356,7 @@ PerfKitBenchmarker includes 3 widely used **networking** benchmarks:
 **ping**, **iperf**, and **netperf**. Each of these network tests can be useful
 in different situations. Below is a short summary of each of these benchmarks.
 For a more complete comparison and analysis of each tool, please refer to our
-[network test tools comparison](https://docs.google.com/document/d/1u2RrTUKdO6Z6Mch0X-E0iXDnH53B3YMTjy7J1WtGs1A)
+[network test tools comparison](https://docs.google.com/document/d/1u2RrTUKdO6Z6Mch0X-E0iXDnH53B3YMTjy7J1WtGs1A).
 
 ### ping
 

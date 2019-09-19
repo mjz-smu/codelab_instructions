@@ -62,7 +62,7 @@ In this lab, you will:
 *   Run benchmark tests using PerfKit Benchmarker
 *   Inspect and using custom configuration files for tests
 *   Persist test result data to BigQuery
-*   Query and visualize result data with PerfKit Explorer
+*   Query and visualize result data with datastudio
 
 ## Prerequisites
 
@@ -626,7 +626,7 @@ review your test results over time, and create data visualizations.
 ### Populate BigQuery dataset with sample data
 
 To quickly experiment with BigQuery, load sample test data from the
-PerfKit Explorer (PKE) repo. PKE is explained in more detail later in this lab.
+codelab repo.
 
 #### Step 1
 
@@ -941,7 +941,7 @@ gathering data, and visualizing performance trends.
 ### Next Steps
 
 *   Run more benchmark tests!
-*   Develop more dashboards in PKE.
+*   Develop more dashboards in datastudio
 
 ### Learn More
 

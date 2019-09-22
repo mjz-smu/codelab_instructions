@@ -35,7 +35,7 @@ installing and running the actual benchmark tests.
 
 PKB divides benchmarking experiments into a multi-step process:
 
-__Configuring > Provisioning > Execution > Teardown > Publish__
+__Configuration > Provisioning > Execution > Teardown > Publish__
 
 ![pkb architecture](images/pkb_architecture.png "PKB Architecture")
 
@@ -44,7 +44,7 @@ performance benchmarking project.
 
 | PKB Arch Stage |    | Performance Benchmarking Process |
 |----------------|----|----------------------------------|
-| Configuring    | -> | 2. Choose benchmark              |
+| Configuration  | -> | 2. Choose benchmark              |
 | Provisioning   | -> | 3. Execute benchmark tests       |
 | Execution      | -> | 3. Execute benchmark tests       |
 | Teardown       | -> | 3. Execute benchmark tests       |
@@ -62,9 +62,16 @@ In this lab, you will:
 *   Explore PKB command-line flags
 *   Consider different network benchmarks
 *   Run benchmark tests using PerfKit Benchmarker
-*   Inspect and using custom configuration files for tests
-*   Persist test result data to BigQuery
-*   Query and visualize result data with datastudio
+*   Inspect and use custom configuration files for tests
+*   Push test result data to [BigQuery](https://cloud.google.com/bigquery)
+*   Query and visualize result data with
+    [Data Studio](https://datastudio.google.com)
+
+>> __Note:__ this lab is biased to running networking benchmarks.
+>>  Networking benchmarks are frequently an initial step in assessing
+>>  the viability of public cloud environments. Ensuring understandable,
+>>  repeatable, and defensible experiments is important in gaining
+>>  agreement to progress to more advanced experiments, and decisions.
 
 ## Prerequisites
 

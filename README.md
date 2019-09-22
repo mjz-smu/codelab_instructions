@@ -50,11 +50,10 @@ performance benchmarking project.
 | Teardown       | -> | 3. Execute benchmark tests       |
 | Publish        | -> | 4. Analyze test data             |
 
-The Initial focus is on reducing the friction with PKB while answering
-performance-related questions for GCP customers.
-
-
 ## What you'll do
+
+This lab is focused on demonstrating a pattern for reducing the friction
+in performance benchmarking, by using PKB.
 
 In this lab, you will:
 
@@ -67,7 +66,8 @@ In this lab, you will:
 *   Query and visualize result data with
     [Data Studio](https://datastudio.google.com)
 
->> __Note:__ this lab is biased to running networking benchmarks.
+>> __Note:__ this lab is biased to running __networking__ benchmarks, on
+>>  __Google Cloud Platform (GCP)__.
 >>  Networking benchmarks are frequently an initial step in assessing
 >>  the viability of public cloud environments. Ensuring understandable,
 >>  repeatable, and defensible experiments is important in gaining

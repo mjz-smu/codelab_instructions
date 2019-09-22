@@ -11,13 +11,13 @@ answer to a performance question.
 ### Performance benchmarking on public cloud
 
 Challenges often arise in selecting appropriate benchmarks, configuring
-nontrivial environments, and sifting through results for actionable
-intelligence and reporting.
+nontrivial environments, achieving consistent results, and sifting through
+results for actionable intelligence and reporting.
 
 Conducting performance benchmarking in public cloud adds layers to the challenge.
 Experiments need to provision resources in cloud, navigate security protections
 by adjusting firewall rules, and eventually deprovision resources for cost
-economies.
+efficiency.
 
 [PerfKit Benchmarker](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker)
 was created to aid benchmark selection, execution, and analysis using public
@@ -34,6 +34,8 @@ installing and running the actual benchmark tests.
 #### PKB Architecture
 
 PKB divides benchmarking experiments into a multi-step process:
+
+__Configuring > Provisioning > Execution > Teardown > Publish__
 
 ![pkb architecture](images/pkb_architecture.png "PKB Architecture")
 
@@ -330,7 +332,7 @@ PKB has a naming convention for benchmarks of
 #### Step 5
 
 When you want to review the details and flags of a benchmark in depth, it can be
-easier to read formatted MarkDown. The `--helpmatchmd` flag emits more easily 
+easier to read formatted MarkDown. The `--helpmatchmd` flag emits more easily
 readable MarkDown text than `--helpmatch`.
 
 Review the available Linux benchmarks using `-helpmatchmd=linux_benchmarks`.
@@ -785,10 +787,10 @@ understandable charts, and tables.
 **Datastudio** is a Google tool for data visualization. It can dynamically pull
 and display data from BiqQuery as well as many other data sources.
 
-With Datastudio, you can copy an existing sample dashboard, and edit it to fit our 
-needs or create one from scratch. You can attach it to your datasource (the 
-BiqQuery tables where your PKB results are stored) and use it to view your data and 
-help identify critical insights into your performance data. Datastudio maintains a 
+With Datastudio, you can copy an existing sample dashboard, and edit it to fit our
+needs or create one from scratch. You can attach it to your datasource (the
+BiqQuery tables where your PKB results are stored) and use it to view your data and
+help identify critical insights into your performance data. Datastudio maintains a
 complete version history in much the same way that Google Docs does.
 
 ### Review a running demo instance of Datastudio
@@ -805,7 +807,7 @@ and a dashboard configuration.
 
 #### Step 1
 
-If you did not already do this earlier, initialize an empty dataset 
+If you did not already do this earlier, initialize an empty dataset
 where result tables and views can be created, secured and shared.
 
 Use the BigQuery command-line tool `bq` in Cloud Shell.
@@ -852,8 +854,8 @@ Waiting on bqjob_xxxx ... (1s) Current status: DONE
 
 #### Step 4
 
-Now that we have loaded our dataset to BigQuery, it would be helpful to apply 
-some simple data transformations to make working with and visualizing the 
+Now that we have loaded our dataset to BigQuery, it would be helpful to apply
+some simple data transformations to make working with and visualizing the
 data easier. To do this, we will create a new view.
 ```
 bq mk \
@@ -873,8 +875,8 @@ bq mk \
       REGEXP_EXTRACT(labels, r"\|sending_zone:(.*?-.*?)-.*?\|") AS sending_region,
       REGEXP_EXTRACT(labels, r"\|receiving_zone:(.*?-.*?)-.*?\|") AS receiving_region,
       REGEXP_EXTRACT(labels, r"\|vm_1_machine_type:(.*?)\|") AS machine_type,
-      REGEXP_EXTRACT(labels, r"\|ip_type:(.*?)\|") AS ip_type 
-    FROM 
+      REGEXP_EXTRACT(labels, r"\|ip_type:(.*?)\|") AS ip_type
+    FROM
     `[project_id].example_dataset.results`' \
 --project_id [project_id] example_dataset.results_view
 ```
@@ -890,7 +892,7 @@ View '[project_id]:example_dataset.results_view' successfully created.
 
 #### Step 1
 
-Look at the 
+Look at the
 [Example Datastudio Report](datastudio.google.com/reporting/97043c2d-12ed-4d47-8b7b-4305f4b4aaed).
 
 On the upper right side of the screen, click the `Make a Copy of This Report` button.
@@ -914,8 +916,8 @@ Then we can now make a copy of the report
 
 #### Step 3
 
-Now, you can create new charts and change your dashboard using you newly imported datasource. Data studio 
-provides a variety of different chart types and options so that you should be able to visualize 
+Now, you can create new charts and change your dashboard using you newly imported datasource. Data studio
+provides a variety of different chart types and options so that you should be able to visualize
 many different types of metrics regarding these benchmarks.
 
 
@@ -952,5 +954,5 @@ gathering data, and visualizing performance trends.
     from Google Cloud Next '19.
 *   Follow the
     [PKB repo](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker). Look
-    for our new improvements in running container benchmarks and our upcoming 
+    for our new improvements in running container benchmarks and our upcoming
     improvements in running VPN benchmarks.

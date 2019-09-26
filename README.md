@@ -527,8 +527,6 @@ You can see multiple flags to customize these benchmark runs.
 PerfKitBenchmarker includes 3 widely used **networking** benchmarks:
 **ping**, **iperf**, and **netperf**. Each of these network tests can be useful
 in different situations. Below is a short summary of each of these benchmarks.
-For a more complete comparison and analysis of each tool, please refer to our
-[network test tools comparison](https://docs.google.com/document/d/1u2RrTUKdO6Z6Mch0X-E0iXDnH53B3YMTjy7J1WtGs1A).
 
 ### ping
 
@@ -849,6 +847,10 @@ Retrieve a sample BigQuery table data file:
 curl -LJO https://raw.githubusercontent.com/SMU-ATT-Center-for-Virtualization/codelab_instructions/datastudio/data/samples_mart/sample_results.json
 ```
 
+> __Note:__ this data was prepared by the networking research team at the
+> [AT&T Center for Virtualization](https://www.smu.edu/Provost/virtualization)
+> at __Southern Methodist University__.
+
 #### Step 3
 
 Load the `samples_mart` dataset from a file.
@@ -975,7 +977,7 @@ You can attach your dashboards to your data sources to easily view your
 performance data and start to identify critical insights. Data Studio maintains
 a complete version history, similar to _history_ in Google Docs.
 
-### Review a running demo instance of Datastudio
+### Review a running demo instance of Data Studio
 
 First, look at an
 [Example Datastudio Report](https://datastudio.google.com/reporting/97043c2d-12ed-4d47-8b7b-4305f4b4aaed).
@@ -1187,17 +1189,18 @@ Enjoy.
 
 ## Cleanup
 
-Since Qwiklab deletes your lab environment completely, no cleanup is needed,
-just click the stop lab button.
+Note that the following resources may have been created, that you may wish to
+remove.
 
-In your own environment you would need to remove all the resources created now
-either via CLI or Google Cloud Console.
+*   The `samples_mart` dataset in BigQuery
+*   The `results` table in the `samples_mart` dataset
+*   The `example_dataset` dataset in BigQuery
+*   The `network_tests` table in the `example_dataset` dataset
+*   Any reports you copied/created in Data Studio
 
 ## Congratulations!
 
 You have completed the Cloud Network Benchmarking with PerfKitBenchmarker lab!
-
-![Networking_125.png](img/Networking_125.png)
 
 ### What was covered
 
@@ -1211,35 +1214,17 @@ gathering data, and visualizing performance trends.
 
 ### Learn More
 
-*   In the Qwiklabs lab, under __Student Resources__, top-left, you'll see
-    links to videos related to the lab. They're worth watching!
+*   Watch
+    [Performance Benchmarking on Google Cloud Platform](https://youtu.be/fNMzlTmufy0)
+    with tools, best practices, and methodologies from the
+    PerfKitBenchmarker team.
 *   Follow the
     [PKB repo](https://github.com/GoogleCloudPlatform/PerfKitBenchmarker).
 
-### Start a Quest
+### Credits
 
-Check out the Qwiklabs Quest
-[Network Performance and Optimization](https://google.qwiklabs.com/quests/46).
+> __Note:__ this original version of this lab was prepared by the networking
+> research team at the
+> [AT&T Center for Virtualization](https://www.smu.edu/Provost/virtualization)
+> at __Southern Methodist University__.
 
-A Quest is a series of related labs that form a small learning path. Completing
-this Quest earns you a badge, to recognize your achievement. You can make
-your badge (or badges) public and link to them in your online resume or social
-media account.
-
-[Enroll in this Quest here](http://google.qwiklabs.com/learning_paths/46/enroll).
-
-[See other available Qwiklabs Quests](http://google.qwiklabs.com/catalog).
-
-### Take Your Next Lab
-
-*   [Network Performance Testing](https://google.qwiklabs.com/focuses/1281?parent=catalog)
-*   [Improving Network Performance I](https://google.qwiklabs.com/focuses/1284?parent=catalog)
-*   [Improving Network Performance II](https://google.qwiklabs.com/focuses/1285?parent=catalog)
-
-![[/fragments/TrainingCertificationOverview]]
-
-##### Manual Last Updated September 25, 2019
-
-##### Lab Last Tested August 21, 2019
-
-![[/fragments/copyright]]

@@ -1223,7 +1223,7 @@ gathering data, and visualizing performance trends.
 
 ### Credits
 
-> __Note:__ this original version of this lab was prepared by the networking
+> __Note:__ the original version of this lab was prepared by the networking
 > research team at the
 > [AT&T Center for Virtualization](https://www.smu.edu/Provost/virtualization)
 > at __Southern Methodist University__.

@@ -838,13 +838,13 @@ You can also create datasets using the BigQuery UI in the GCP Console.
 Retrieve a sample BigQuery table schema file:
 
 ```
-curl -LJO https://raw.githubusercontent.com/SMU-ATT-Center-for-Virtualization/codelab_instructions/datastudio/data/samples_mart/results_table_schema.json
+curl -LJO https://raw.githubusercontent.com/SMU-ATT-Center-for-Virtualization/codelab_instructions/master/data/samples_mart/results_table_schema.json
 ```
 
 Retrieve a sample BigQuery table data file:
 
 ```
-curl -LJO https://raw.githubusercontent.com/SMU-ATT-Center-for-Virtualization/codelab_instructions/datastudio/data/samples_mart/sample_results.json
+curl -LJO https://raw.githubusercontent.com/SMU-ATT-Center-for-Virtualization/codelab_instructions/master/data/samples_mart/sample_results.json
 ```
 
 > __Note:__ this data was prepared by the networking research team at the
